@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JELE CHEWY × KAMU KAMU — Campaign Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --jele:#C8102E;
+  --jele-dark:#8E0A20;
+  --kamu:#2A6E5E;
+  --camellia:#E8829F;
+  --assam:#C97B3E;
+  --ink:#1A1D21;
+  --muted:#6B7280;
+  --line:#E8EAED;
+  --bg:#FAFAFA;
+  --ok:#0F9D58;
+  --warn:#E8A33D;
+  --wait:#9AA0A6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 20px 64px}
+
+/* ---------- header ---------- */
+header{background:linear-gradient(120deg,var(--jele) 0%,var(--jele-dark) 55%,var(--kamu) 140%);color:#fff;border-radius:14px;padding:30px 32px;margin-bottom:26px}
+.eyebrow{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;opacity:.75;font-weight:600}
+header h1{font-size:2rem;font-weight:700;line-height:1.25;margin:6px 0 4px}
+header .sub{opacity:.85;font-size:.95rem}
+.hmeta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 14px;font-size:.82rem;font-weight:500}
+
+/* ---------- section ---------- */
+section{margin-bottom:34px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.sec-head h2{font-size:1.12rem;font-weight:700}
+.sec-head .note{font-size:.82rem;color:var(--muted)}
+
+/* ---------- kpi cards ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.k-label{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.k-plan{font-size:1.9rem;font-weight:700;margin-top:6px;letter-spacing:-.02em}
+.k-unit{font-size:.85rem;color:var(--muted);font-weight:500;margin-left:4px}
+.k-actual{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:14px;font-size:.8rem;white-space:nowrap}
+.k-actual b{font-size:1rem}
+.bar{height:6px;background:#EEF0F2;border-radius:999px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--jele)}
+.pending{color:var(--wait);font-style:normal}
+
+/* ---------- table ---------- */
+.tbl-wrap{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead th{background:#F5F6F7;text-align:left;padding:11px 16px;font-weight:600;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;border-bottom:1px solid var(--line)}
+tbody td{padding:11px 16px;border-bottom:1px solid #F2F3F4;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#FCFCFD}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.grp td{background:#FBFBFC;font-weight:700}
+tr.total td{background:#F5F6F7;font-weight:700;border-top:2px solid var(--line)}
+.tbl-scroll{overflow-x:auto}
+.tbl-scroll table{min-width:1080px}
+thead th.grp-h{text-align:center;border-left:1px solid var(--line);background:#EFF1F3;color:var(--ink)}
+thead th.sub-h{font-size:.7rem;padding-top:7px;padding-bottom:7px;background:#F5F6F7}
+td.sep,th.sep{border-left:1px solid var(--line)}
+.pct{display:inline-block;margin-left:7px;padding:1px 7px;border-radius:999px;font-size:.7rem;font-weight:700;vertical-align:1px}
+.p-hi{background:#E6F4EA;color:#0F7A44}
+.p-mid{background:#FDF3E2;color:#A96C13}
+.p-low{background:#FDECEC;color:#B3261E}
+.p-neu{background:#F1F2F4;color:#5F6570}
+.meta-line{display:block;font-size:.72rem;color:var(--muted);font-weight:400;margin-top:1px}
+.meta-line a{color:var(--muted);text-decoration:none;border-bottom:1px dotted #C7CBD1}
+.meta-line a:hover{color:var(--jele);border-bottom-color:var(--jele)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:1px}
+
+/* ---------- badges & links ---------- */
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;font-weight:600;white-space:nowrap}
+.b-live{background:#E6F4EA;color:#0F7A44}
+.b-review{background:#FDF3E2;color:#A96C13}
+.b-wait{background:#F1F2F4;color:#7A8189}
+.b-tt{background:#111;color:#fff}
+.b-fb{background:#1877F2;color:#fff}
+a.link{color:var(--jele);text-decoration:none;font-weight:600;border-bottom:1px solid rgba(200,16,46,.25)}
+a.link:hover{border-bottom-color:var(--jele)}
+.dash{color:var(--wait)}
+
+/* ---------- gantt ---------- */
+.gantt{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;overflow-x:auto}
+.g-grid{min-width:860px}
+.g-row{display:grid;grid-template-columns:220px 1fr;align-items:center;gap:12px;padding:3px 0}
+.g-name{font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-track{position:relative;height:20px;background:linear-gradient(90deg,#F4F5F6 0 1px,transparent 1px);background-size:calc(100%/var(--cols,24)) 100%;border-radius:4px}
+.g-bar{position:absolute;top:2px;height:16px;border-radius:4px;font-size:.68rem;color:#fff;line-height:16px;padding:0 6px;overflow:hidden;white-space:nowrap;font-weight:600}
+.g-head{display:grid;grid-template-columns:220px 1fr;gap:12px;margin-bottom:6px}
+.g-days{display:grid;grid-template-columns:repeat(var(--cols,24),1fr);font-size:.6rem;color:var(--muted);text-align:center}
+.g-months{display:grid;grid-template-columns:repeat(var(--cols,24),1fr);font-size:.68rem;color:var(--ink);font-weight:700;margin-bottom:2px}
+.g-today{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--jele);opacity:.75}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:.78rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* ---------- split ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.share-row{display:grid;grid-template-columns:150px 1fr 78px;align-items:center;gap:12px;padding:7px 0;font-size:.85rem}
+.share-bar{height:9px;background:#F0F1F3;border-radius:999px;overflow:hidden}
+.share-bar i{display:block;height:100%;border-radius:999px}
+
+/* ---------- callout ---------- */
+.callout{background:#FFF8E7;border:1px solid #F3E2BC;border-left:4px solid var(--warn);border-radius:10px;padding:14px 18px;font-size:.86rem;color:#6B5320}
+.callout b{color:#4A3812}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">SNNP · Campaign Dashboard</div>
+  <h1>JELE CHEWY × KAMU KAMU</h1>
+  <div class="sub">เยลลี่ชาผลไม้ — Camellia Tea &amp; Assam Tea · แคมเปญ Launching + Sampling + Always-On</div>
+  <div class="hmeta">
+    <span class="chip">ช่วงแคมเปญ 20 ก.ค. – 12 ส.ค. 2026</span>
+    <span class="chip">Facebook + TikTok</span>
+    <span class="chip">KOL / Page 6 ราย</span>
+    <span class="chip">ชิ้นงาน 22 ชิ้น</span>
+    <span class="chip" id="updated"></span>
+  </div>
+</header>
+
+<!-- ============ HERO KPI ============ -->
+<section>
+  <div class="sec-head">
+    <h2>ภาพรวม KPI ทั้งแคมเปญ</h2>
+    <div class="note">ตัวเลข Plan มาจากชีต KPI · ช่อง Actual รอเติมเมื่อได้ผลจริง</div>
+  </div>
+  <div class="kpis" id="heroKpis"></div>
+</section>
+
+<!-- ============ BUDGET NOTE ============ -->
+<section>
+  <div class="callout">
+    <b>จุดที่ควรเช็กในไฟล์ต้นทาง:</b> ช่อง <i>Total All</i> ของ Media Budget ในชีต KPI ระบุไว้ <b>112,500 บาท</b>
+    แต่เมื่อรวมยอดรายกลุ่มทั้ง 5 กลุ่มจริง ๆ ได้ <b>128,946 บาท</b> — ส่วนต่าง 16,446 บาท เท่ากับยอดกลุ่ม VDO Launching พอดี
+    (คาดว่าสูตรรวมไม่ได้ครอบคลุมแถวกลุ่มนั้น) แดชบอร์ดนี้ยึดยอดรวมจริงจากรายกลุ่มไว้ก่อน หากยึดตัวเลขในชีตให้แจ้งลินินแก้ได้ทันที
+  </div>
+</section>
+
+<!-- ============ KPI BY GROUP ============ -->
+<section>
+  <div class="sec-head">
+    <h2>KPI แยกตามกลุ่มงาน — Plan vs Actual</h2>
+    <div class="note">ช่อง Actual ว่าง = ยังไม่ได้กรอกผลจริง · ชิป % คือความสำเร็จเทียบเป้า</div>
+  </div>
+  <div class="tbl-wrap tbl-scroll">
+    <table id="groupTable">
+      <thead>
+        <tr>
+          <th rowspan="2" style="width:26%">กลุ่มงาน / ชิ้นงาน</th>
+          <th rowspan="2" class="num">ชิ้น</th>
+          <th rowspan="2" class="num">Media<br>Budget</th>
+          <th colspan="2" class="grp-h">Reach</th>
+          <th colspan="2" class="grp-h">View</th>
+          <th colspan="2" class="grp-h">Engagement</th>
+        </tr>
+        <tr>
+          <th class="num sub-h">Plan</th><th class="num sub-h">Actual</th>
+          <th class="num sub-h">Plan</th><th class="num sub-h">Actual</th>
+          <th class="num sub-h">Plan</th><th class="num sub-h">Actual</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ SHARE ============ -->
+<section>
+  <div class="split">
+    <div class="card">
+      <div class="sec-head" style="margin-bottom:6px"><h2 style="font-size:1rem">สัดส่วน View KPI</h2></div>
+      <div id="shareView"></div>
+    </div>
+    <div class="card">
+      <div class="sec-head" style="margin-bottom:6px"><h2 style="font-size:1rem">สัดส่วน Media Budget</h2></div>
+      <div id="shareBudget"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE TIKTOK ============ -->
+<section>
+  <div class="sec-head">
+    <h2>ยอดสด TikTok KOLs <span class="badge b-live" style="vertical-align:2px">AUTO</span></h2>
+    <div class="note" id="liveStamp"></div>
+  </div>
+  <div class="tbl-wrap tbl-scroll">
+    <table id="liveTable">
+      <thead>
+        <tr>
+          <th>KOL</th><th class="num">Views</th><th class="num">Likes</th>
+          <th class="num">Comments</th><th class="num">Shares</th><th class="num">Saves</th>
+          <th class="num">Engagement</th><th class="num">ER%</th><th class="num">CPV</th><th>โพสต์</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ CONTENT & LINKS ============ -->
+<section>
+  <div class="sec-head">
+    <h2>ชิ้นงาน &amp; ลิงก์โพสต์</h2>
+    <div class="note"><b id="linkCount"></b> · ชิ้นที่ยังไม่มีลิงก์ขึ้นเป็น “รอลิงก์” ไว้ก่อน เติมทีหลังได้</div>
+  </div>
+  <div class="tbl-wrap">
+    <table id="postTable">
+      <thead>
+        <tr>
+          <th style="width:28%">ชิ้นงาน</th>
+          <th>ช่องทาง</th>
+          <th>ผู้เผยแพร่</th>
+          <th>วันโพสต์</th>
+          <th>สถานะ</th>
+          <th>ลิงก์</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section>
+  <div class="sec-head">
+    <h2>ไทม์ไลน์ Boost Ads</h2>
+    <div class="note">20 ก.ค. – 12 ส.ค. 2026 · เส้นแดงคือวันนี้</div>
+  </div>
+  <div class="gantt">
+    <div class="g-grid">
+      <div class="g-head">
+        <div></div>
+        <div>
+          <div class="g-months" id="gMonths"></div>
+          <div class="g-days" id="gDays"></div>
+        </div>
+      </div>
+      <div id="gRows"></div>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:#C8102E"></i> VDO Launching</span>
+      <span><i class="sw" style="background:#E8829F"></i> AWO Content</span>
+      <span><i class="sw" style="background:#C97B3E"></i> VDO Sampling</span>
+      <span><i class="sw" style="background:#1877F2"></i> Facebook Page</span>
+      <span><i class="sw" style="background:#2A6E5E"></i> TikTok KOLs</span>
+      <span><i class="sw" style="background:#9AA0A6"></i> LAL Retargeting</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>ที่มาข้อมูล: Client_Sheet_JELE CHEWY X KAMU KAMU — June2026.xlsx (ชีต KPI · Working · KOL List · Timeline)</span>
+  <span>จัดทำโดย ลินิน</span>
+</footer>
+
+</div>
+
+<script>
+/* =======================================================================
+   แก้ข้อมูลได้ที่บล็อกนี้บล็อกเดียว — ส่วนที่เหลือคำนวณให้อัตโนมัติ
+   ======================================================================= */
+
+/* ผลจริงระดับชิ้นงาน: เติมที่ ar (Reach) / av (View) / ae (Engagement) ของแต่ละแถว
+   ยอดรวมรายกลุ่ม + การ์ดบนสุด + % ความสำเร็จ คำนวณต่อให้เองทั้งหมด
+   ปล่อย null ไว้ = ยังไม่มีข้อมูล จะขึ้นเป็นขีดสีเทา                               */
+
+const GROUPS = [
+  { name:'VDO Launching', color:'#C8102E', items:[
+    { n:'VDO Teaser (FB 1,000 / TT 1,175)',      b:2775, r:30000,  v:90000,  e:0, ar:null, av:null, ae:null },
+    { n:'VDO Launching (FB 1,175 / TT 3,000)',   b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Introduction (FB 1,175 / TT 3,000)',b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Review (FB 1,175 / TT 3,000)',      b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null },
+  ]},
+  { name:'VDO Sampling', color:'#C97B3E', items:[
+    { n:'VDO Sampling Troop #1', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #2', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #3', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #4', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+  ]},
+  { name:'AWO Content', color:'#E8829F', items:[
+    { n:'Photo AWO #1',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo album AWO #2', b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #3',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #4',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #5',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #6',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #7',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #8',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+  ]},
+  { name:'Facebook Page', color:'#1877F2', items:[
+    { n:'ผู้บริโภค',      b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
+      f:'3M',   fee:47000, url:'https://www.facebook.com/wecanchoose',        post:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
+    { n:'ชี้เป้าเซเว่น',   b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
+      f:'1.2M', fee:38000, url:'https://www.facebook.com/share/1Aq9n7d9vU/',  post:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
+  ]},
+  { name:'TikTok KOLs', color:'#2A6E5E', items:[
+    { n:'foodballstylee',      key:'foodballstylee',      b:10000, r:300000, v:900000, e:0, ar:null, av:null, ae:null,
+      f:'2M',     fee:50000, free:true, url:'https://www.tiktok.com/@foodballstylee',      post:'https://vt.tiktok.com/ZS4U7ftpy/' },
+    { n:'chatangg',            key:'chatangg',            b:10000, r:300000, v:900000, e:0, ar:null, av:null, ae:null,
+      f:'859.3K', fee:19000, free:true, url:'https://www.tiktok.com/@chatangg',            post:'https://vt.tiktok.com/ZS4yjnsWB/' },
+    { n:'100lowteens',         key:'100lowteens',         b:10000, r:300000, v:900000, e:0, ar:null, av:null, ae:null,
+      f:'771.2K', fee:29000, url:'https://www.tiktok.com/@100lowteens',         post:'https://vt.tiktok.com/ZS4U6vYTF/' },
+    { n:'sristories.official', key:'sristories.official', b:10000, r:300000, v:900000, e:0, ar:null, av:null, ae:null,
+      f:'81.7K',  fee:17000, url:'https://www.tiktok.com/@sristories.official', post:'https://vt.tiktok.com/ZS4UfB9Gu/' },
+  ]},
+];
+
+// งบที่ใช้จริง (Media) — เติมเมื่อปิดยอด
+const ACTUAL_SPEND = null;
+
+/* === LIVE DATA START === ห้ามแก้มือ · GitHub Actions เขียนทับทุก 30 นาที === */
+const LIVE = {};
+/* === LIVE DATA END === */
+
+// เอายอดสดจาก TikTok มาเติมช่อง Actual ของ KOL อัตโนมัติ
+GROUPS.forEach(g => g.items.forEach(i => {
+  const d = i.key && LIVE[i.key];
+  if(!d) return;
+  i.av = d.views || 0;
+  i.ae = (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
+  i.live = d;
+}));
+
+// ชิ้นงาน + ลิงก์โพสต์ (ที่ยังไม่มี ปล่อย link เป็น null → ขึ้น "รอลิงก์")
+const POSTS = [
+  { n:'VDO Teaser',            ch:'FB+TT', by:'Brand',              date:'2026-07-21', st:'live',   link:null },
+  { n:'VDO Launching',         ch:'FB+TT', by:'Brand',              date:'2026-07-24', st:'live',   link:null },
+  { n:'VDO Introduction',      ch:'FB+TT', by:'Brand',              date:'2026-07-25', st:'live',   link:null },
+  { n:'Photo AWO #1',          ch:'FB',    by:'Brand',              date:'2026-07-28', st:'live',   link:null },
+  { n:'Photo AWO #2',          ch:'FB',    by:'Brand',              date:'2026-07-29', st:'live',   link:null },
+  { n:'Photo album AWO #3',    ch:'FB',    by:'Brand',              date:'2026-07-31', st:'live',   link:null },
+  { n:'VDO Review',            ch:'FB+TT', by:'Brand',              date:'2026-08-02', st:'live',   link:null },
+  { n:'Photo AWO activity #4', ch:'FB',    by:'Brand',              date:'2026-08-05', st:'wait',   link:null },
+  { n:'Photo AWO เจเล่แก้มป่อง #5', ch:'FB', by:'Brand',            date:'2026-08-12', st:'wait',   link:null },
+  { n:'Photo AWO #6',          ch:'FB',    by:'Brand',              date:'-',          st:'wait',   link:null },
+  { n:'Photo AWO #7',          ch:'FB',    by:'Brand',              date:'-',          st:'wait',   link:null },
+  { n:'Photo AWO #8',          ch:'FB',    by:'Brand',              date:'-',          st:'wait',   link:null },
+  { n:'VDO Sampling Troop #1', ch:'FB+TT', by:'Brand',              date:'2026-08-11', st:'wait',   link:null },
+  { n:'VDO Sampling Troop #2', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait',   link:null },
+  { n:'VDO Sampling Troop #3', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait',   link:null },
+  { n:'VDO Sampling Troop #4', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait',   link:null },
+  { n:'KOL Post — chatangg',            ch:'TT', by:'chatangg',            date:'2026-08-03', st:'live',   link:'https://vt.tiktok.com/ZS4yjnsWB/' },
+  { n:'KOL Post — 100lowteens',         ch:'TT', by:'100lowteens',         date:'2026-08-03', st:'live',   link:'https://vt.tiktok.com/ZS4U6vYTF/' },
+  { n:'KOL Post — sristories.official', ch:'TT', by:'sristories.official', date:'2026-08-03', st:'live',   link:'https://vt.tiktok.com/ZS4UfB9Gu/' },
+  { n:'KOL Post — foodballstylee',      ch:'TT', by:'foodballstylee',      date:'2026-08-03', st:'review', link:'https://vt.tiktok.com/ZS4U7ftpy/' },
+  { n:'Page Post — ชี้เป้าเซเว่น',      ch:'FB', by:'ชี้เป้าเซเว่น',       date:'2026-07-23', st:'live',   link:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
+  { n:'Page Post — ผู้บริโภค',          ch:'FB', by:'ผู้บริโภค',           date:'2026-08-01', st:'live',   link:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
+];
+
+// Gantt: start = index วันที่ (0 = 20 ก.ค. 2026), len = จำนวนวัน
+const TIMELINE = [
+  { n:'VDO Teaser',                  s:1,  d:3,  c:'#C8102E', t:'Boost 3 วัน' },
+  { n:'VDO Launching',               s:4,  d:7,  c:'#C8102E', t:'Boost 7 วัน' },
+  { n:'VDO Introduction',            s:5,  d:14, c:'#C8102E', t:'Boost 14 วัน' },
+  { n:'VDO Review',                  s:13, d:14, c:'#C8102E', t:'Boost 14 วัน' },
+  { n:'Photo AWO #1',                s:8,  d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo AWO #2',                s:9,  d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo album AWO #3',          s:11, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo AWO activity #4',       s:16, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo AWO เจเล่แก้มป่อง #5',   s:23, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'VDO Sampling Troop #1',       s:22, d:14, c:'#C97B3E', t:'Boost 14 วัน' },
+  { n:'ชี้เป้าเซเว่น (FB Page)',      s:4,  d:15, c:'#1877F2', t:'Boost 15 วัน' },
+  { n:'ชี้เป้าเซเว่น — LAL',          s:18, d:15, c:'#9AA0A6', t:'LAL 15 วัน' },
+  { n:'ผู้บริโภค (FB Page)',          s:13, d:15, c:'#1877F2', t:'Boost 15 วัน' },
+  { n:'KOLs TikTok ×4',              s:15, d:7,  c:'#2A6E5E', t:'Boost 7 วัน' },
+  { n:'KOLs TikTok ×4 — LAL',        s:23, d:15, c:'#9AA0A6', t:'LAL 15 วัน' },
+];
+
+const TODAY_INDEX = 14; // 3 ส.ค. 2026
+
+/* ======================= เรนเดอร์ (ไม่ต้องแก้) ======================= */
+const fmt = n => n.toLocaleString('en-US');
+const sum = (a,k) => a.reduce((s,x)=>s+x[k],0);
+const short = n => n>=1e6 ? (n/1e6).toFixed(n%1e6?1:0)+'M'
+                 : n>=1e3 ? (n/1e3).toFixed(n%1e3?1:0)+'K' : String(n);
+
+// รวมค่าจริงแบบข้าม null (ถ้าไม่มีสักชิ้น = null)
+const asum = (a,k) => { const v=a.filter(x=>x[k]!=null); return v.length? v.reduce((s,x)=>s+x[k],0) : null; };
+const done  = (a,k) => a.filter(x=>x[k]!=null).length;
+
+const totals = GROUPS.map(g => ({
+  name:g.name, color:g.color, count:g.items.length, items:g.items,
+  b:sum(g.items,'b'), r:sum(g.items,'r'), v:sum(g.items,'v'), e:sum(g.items,'e'),
+  ar:asum(g.items,'ar'), av:asum(g.items,'av'), ae:asum(g.items,'ae'),
+  fee:sum(g.items.map(i=>({fee:i.fee||0})),'fee')
+}));
+const ALL = {
+  count:sum(totals,'count'),
+  b:sum(totals,'b'), r:sum(totals,'r'), v:sum(totals,'v'), e:sum(totals,'e'),
+  ar:asum(totals,'ar'), av:asum(totals,'av'), ae:asum(totals,'ae'),
+  fee:sum(totals,'fee')
+};
+const ALL_ITEMS = GROUPS.flatMap(g=>g.items);
+
+// ชิป %
+function pctChip(act, plan){
+  if(act==null || !plan) return '';
+  const p = Math.round(act/plan*100);
+  const cls = p>=100 ? 'p-hi' : p>=70 ? 'p-mid' : 'p-low';
+  return `<span class="pct ${cls}">${p}%</span>`;
+}
+function actCell(act, plan, sep){
+  const c = sep ? ' sep' : '';
+  if(act!=null) return `<td class="num${c}">${fmt(act)}${pctChip(act,plan)}</td>`;
+  return `<td class="num${c}"><span class="dash">${plan?'รอผล':'–'}</span></td>`;
+}
+
+// -- hero cards
+const heroDefs = [
+  { label:'Reach KPI',      plan:ALL.r, act:ALL.ar, unit:'ครั้ง', k:'ar' },
+  { label:'View KPI',       plan:ALL.v, act:ALL.av, unit:'วิว',   k:'av' },
+  { label:'Engagement KPI', plan:ALL.e, act:ALL.ae, unit:'ครั้ง', k:'ae' },
+  { label:'Media Budget',   plan:ALL.b, act:ACTUAL_SPEND, unit:'บาท', k:null },
+];
+document.getElementById('heroKpis').innerHTML = heroDefs.map(k=>{
+  const pct = k.act==null ? 0 : Math.round(k.act/k.plan*100);
+  const w = Math.min(100, pct);
+  const cls = !k.k ? 'p-neu' : pct>=100 ? 'p-hi' : pct>=70 ? 'p-mid' : 'p-low';
+  const actHtml = k.act==null
+    ? '<span class="pending">รอข้อมูลจริง</span>'
+    : `<b>${fmt(k.act)}</b><span class="pct ${cls}">${pct}%</span>`;
+  const sub = k.k ? `Actual <span style="opacity:.7">(${done(ALL_ITEMS,k.k)}/${ALL.count} ชิ้น)</span>`
+                  : `ใช้จริง`;
+  return `<div class="card">
+    <div class="k-label">${k.label}</div>
+    <div class="k-plan">${fmt(k.plan)}<span class="k-unit">${k.unit}</span></div>
+    <div class="k-actual"><span style="color:var(--muted)">${sub}</span><span>${actHtml}</span></div>
+    <div class="bar"><i style="width:${w}%;${k.k?'':'background:var(--muted)'}"></i></div>
+  </div>`;
+}).join('') + `<div class="card">
+    <div class="k-label">ค่าตัว KOL / เพจ</div>
+    <div class="k-plan">${fmt(ALL.fee)}<span class="k-unit">บาท</span></div>
+    <div class="k-actual"><span style="color:var(--muted)">รวมกับ Media</span><span><b>${fmt(ALL.fee+ALL.b)}</b> <span class="k-unit">บาท</span></span></div>
+    <div class="bar"><i style="width:100%;background:var(--kamu)"></i></div>
+  </div>`;
+
+// -- group table
+const gt = document.querySelector('#groupTable tbody');
+gt.innerHTML = totals.map(g=>{
+  const head = `<tr class="grp">
+    <td><span class="dot" style="background:${g.color}"></span>${g.name}</td>
+    <td class="num">${g.count}</td><td class="num">${fmt(g.b)}</td>
+    <td class="num sep">${fmt(g.r)}</td>${actCell(g.ar,g.r)}
+    <td class="num sep">${fmt(g.v)}</td>${actCell(g.av,g.v)}
+    <td class="num sep">${g.e?fmt(g.e):'<span class="dash">–</span>'}</td>${actCell(g.ae,g.e)}
+  </tr>`;
+  const rows = g.items.map(i=>{
+    const meta = i.f ? `<span class="meta-line">${i.f} followers · ค่าตัว ${fmt(i.fee)}฿${i.free?' · Free asset':''}
+      · <a href="${i.url}" target="_blank" rel="noopener">โปรไฟล์</a>
+      ${i.post?`· <a href="${i.post}" target="_blank" rel="noopener">โพสต์</a>`:''}</span>` : '';
+    return `<tr>
+      <td style="padding-left:34px"><span style="color:var(--muted)">${i.n}</span>${meta}</td>
+      <td class="num"></td><td class="num">${fmt(i.b)}</td>
+      <td class="num sep">${fmt(i.r)}</td>${actCell(i.ar,i.r)}
+      <td class="num sep">${fmt(i.v)}</td>${actCell(i.av,i.v)}
+      <td class="num sep">${i.e?fmt(i.e):'<span class="dash">–</span>'}</td>${actCell(i.ae,i.e)}
+    </tr>`;
+  }).join('');
+  return head + rows;
+}).join('') + `<tr class="total">
+  <td>รวมทั้งหมด</td><td class="num">${ALL.count}</td><td class="num">${fmt(ALL.b)}</td>
+  <td class="num sep">${fmt(ALL.r)}</td>${actCell(ALL.ar,ALL.r)}
+  <td class="num sep">${fmt(ALL.v)}</td>${actCell(ALL.av,ALL.v)}
+  <td class="num sep">${fmt(ALL.e)}</td>${actCell(ALL.ae,ALL.e)}
+</tr>`;
+
+// -- share bars
+function share(elId, key){
+  const max = Math.max(...totals.map(t=>t[key]));
+  document.getElementById(elId).innerHTML = totals.map(t=>{
+    const pct = Math.round(t[key]/ALL[key]*100);
+    return `<div class="share-row">
+      <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name}</span>
+      <span class="share-bar"><i style="width:${t[key]/max*100}%;background:${t.color}"></i></span>
+      <span class="num" style="color:var(--muted)">${pct}% · ${short(t[key])}</span>
+    </div>`;
+  }).join('');
+}
+share('shareView','v');
+share('shareBudget','b');
+
+// -- live tiktok
+const liveItems = ALL_ITEMS.filter(i=>i.key);
+document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
+  const d = i.live;
+  if(!d) return `<tr><td style="font-weight:600">${i.n}</td>
+    <td colspan="8" style="color:var(--wait)">รอรอบดึงข้อมูลถัดไป — ระบบดึงอัตโนมัติทุก 30 นาที</td>
+    <td><a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a></td></tr>`;
+  const eng = (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
+  const er  = d.views ? (eng/d.views*100).toFixed(2)+'%' : '–';
+  const cpv = d.views ? ((i.fee+i.b)/d.views).toFixed(3) : '–';
+  return `<tr><td style="font-weight:600">${i.n}<span class="meta-line">${i.f} followers</span></td>
+    <td class="num" style="font-weight:700">${fmt(d.views||0)}</td>
+    <td class="num">${fmt(d.likes||0)}</td><td class="num">${fmt(d.comments||0)}</td>
+    <td class="num">${fmt(d.shares||0)}</td><td class="num">${fmt(d.saves||0)}</td>
+    <td class="num">${fmt(eng)}</td><td class="num">${er}</td><td class="num">${cpv}</td>
+    <td><a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a></td></tr>`;
+}).join('') + (()=>{
+  const got = liveItems.filter(i=>i.live);
+  if(!got.length) return '';
+  const s = k => got.reduce((a,i)=>a+(i.live[k]||0),0);
+  const eng = s('likes')+s('comments')+s('shares')+s('saves');
+  return `<tr class="total"><td>รวม</td><td class="num">${fmt(s('views'))}</td>
+    <td class="num">${fmt(s('likes'))}</td><td class="num">${fmt(s('comments'))}</td>
+    <td class="num">${fmt(s('shares'))}</td><td class="num">${fmt(s('saves'))}</td>
+    <td class="num">${fmt(eng)}</td>
+    <td class="num">${s('views')?(eng/s('views')*100).toFixed(2)+'%':'–'}</td><td></td><td></td></tr>`;
+})();
+document.getElementById('liveStamp').innerHTML = LIVE._updated
+  ? `ดึงล่าสุด ${LIVE._updated} (UTC) · ระบบรันทุก 30 นาที · CPV = (ค่าตัว + media) ÷ views`
+  : `ยังไม่มีข้อมูล — รอ GitHub Actions รันรอบแรก · CPV = (ค่าตัว + media) ÷ views`;
+
+// -- posts
+const ST = { live:['b-live','เผยแพร่แล้ว'], review:['b-review','รอ Approve'], wait:['b-wait','รอลิงก์'] };
+const CH = { 'TT':'<span class="badge b-tt">TikTok</span>', 'FB':'<span class="badge b-fb">Facebook</span>',
+             'FB+TT':'<span class="badge b-fb">FB</span> <span class="badge b-tt">TT</span>' };
+document.querySelector('#postTable tbody').innerHTML = POSTS.map(p=>{
+  const [cls,label] = ST[p.st];
+  const link = p.link ? `<a class="link" href="${p.link}" target="_blank" rel="noopener">เปิดโพสต์ ↗</a>`
+                      : `<span class="dash">รอลิงก์</span>`;
+  const d = p.date==='-' ? '<span class="dash">–</span>'
+          : new Date(p.date).toLocaleDateString('th-TH-u-ca-gregory',{day:'numeric',month:'short'});
+  return `<tr><td style="font-weight:500">${p.n}</td><td>${CH[p.ch]}</td><td>${p.by}</td>
+    <td style="white-space:nowrap">${d}</td><td><span class="badge ${cls}">${label}</span></td><td>${link}</td></tr>`;
+}).join('');
+const withLink = POSTS.filter(p=>p.link).length;
+document.getElementById('linkCount').textContent = `มีลิงก์แล้ว ${withLink} / ${POSTS.length} ชิ้น`;
+
+// -- gantt
+const DAYS = 38, START = new Date(2026,6,20);
+document.querySelector('.g-grid').style.setProperty('--cols', DAYS);
+let months='', days='';
+for(let i=0;i<DAYS;i++){
+  const d = new Date(START); d.setDate(START.getDate()+i);
+  const showDay = (i===TODAY_INDEX) || (d.getDate()%2===0);
+  days += `<div${i===TODAY_INDEX?' style="color:#C8102E;font-weight:700"':''}>${showDay?d.getDate():''}</div>`;
+  months += `<div>${(i===0||d.getDate()===1)?(d.getMonth()===6?'ก.ค.':'ส.ค.'):''}</div>`;
+}
+document.getElementById('gDays').innerHTML = days;
+document.getElementById('gMonths').innerHTML = months;
+document.getElementById('gRows').innerHTML = TIMELINE.map(t=>{
+  const left = t.s/DAYS*100, width = Math.min(t.d, DAYS-t.s)/DAYS*100;
+  return `<div class="g-row"><div class="g-name">${t.n}</div>
+    <div class="g-track">
+      <div class="g-bar" style="left:${left}%;width:${width}%;background:${t.c}" title="${t.t}">${t.t}</div>
+      <div class="g-today" style="left:${(TODAY_INDEX+0.5)/DAYS*100}%"></div>
+    </div></div>`;
+}).join('');
+
+document.getElementById('updated').textContent =
+  'อัปเดต ' + new Date().toLocaleDateString('th-TH-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'});
+</script>
+</body>
+</html>

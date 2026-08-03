@@ -1,0 +1,10 @@
+{
+  "brand_name": "JELE CHEWY x KAMU KAMU",
+  "campaign": "Launching + Sampling + Always-On (Jul-Aug 2026)",
+  "platforms": ["Facebook", "TikTok"],
+  "repo_name": "jele-kamu-dashboard",
+  "github_user": "achiralinin",
+  "colors": { "primary": "#C8102E", "secondary": "#2A6E5E", "accent": "#E8829F" },
+  "kpi": { "reach": 3390000, "view": 10000000, "engagement": 7470, "media_budget": 128946, "kol_fee": 200000 },
+  "update_interval_minutes": 30
+}
