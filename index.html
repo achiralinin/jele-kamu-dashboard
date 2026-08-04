@@ -108,9 +108,6 @@ a.link:hover{border-bottom-color:var(--jele)}
 .share-bar{height:9px;background:#F0F1F3;border-radius:999px;overflow:hidden}
 .share-bar i{display:block;height:100%;border-radius:999px}
 
-/* ---------- callout ---------- */
-.callout{background:#FFF8E7;border:1px solid #F3E2BC;border-left:4px solid var(--warn);border-radius:10px;padding:14px 18px;font-size:.86rem;color:#6B5320}
-.callout b{color:#4A3812}
 footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 </style>
 </head>
@@ -137,15 +134,6 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
     <div class="note">ตัวเลข Plan มาจากชีต KPI · ช่อง Actual รอเติมเมื่อได้ผลจริง</div>
   </div>
   <div class="kpis" id="heroKpis"></div>
-</section>
-
-<!-- ============ BUDGET NOTE ============ -->
-<section>
-  <div class="callout">
-    <b>จุดที่ควรเช็กในไฟล์ต้นทาง:</b> ช่อง <i>Total All</i> ของ Media Budget ในชีต KPI ระบุไว้ <b>112,500 บาท</b>
-    แต่เมื่อรวมยอดรายกลุ่มทั้ง 5 กลุ่มจริง ๆ ได้ <b>128,946 บาท</b> — ส่วนต่าง 16,446 บาท เท่ากับยอดกลุ่ม VDO Launching พอดี
-    (คาดว่าสูตรรวมไม่ได้ครอบคลุมแถวกลุ่มนั้น) แดชบอร์ดนี้ยึดยอดรวมจริงจากรายกลุ่มไว้ก่อน หากยึดตัวเลขในชีตให้แจ้งลินินแก้ได้ทันที
-  </div>
 </section>
 
 <!-- ============ KPI BY GROUP ============ -->
@@ -280,13 +268,13 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 const GROUPS = [
   { name:'VDO Launching', color:'#C8102E', items:[
-    { n:'VDO Teaser (FB 1,000 / TT 1,175)',      key:'vdo_teaser',    b:2775, r:30000,  v:90000,  e:0, ar:null, av:null, ae:null,
+    { n:'VDO Teaser (FB 1,000 / TT 1,175)',      key:'vdo_teaser',    b:2775, r:30000,  v:90000,  e:0, ar:91692, av:123748, ae:64,
       fb:'https://www.facebook.com/share/r/1C38MZaxaV/', post:'https://vt.tiktok.com/ZS4PJLMF4/' },
-    { n:'VDO Launching (FB 1,175 / TT 3,000)',   key:'vdo_launching', b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null,
+    { n:'VDO Launching (FB 1,175 / TT 3,000)',   key:'vdo_launching', b:4557, r:40000,  v:130000, e:0, ar:84346, av:131564, ae:114,
       fb:'https://www.facebook.com/share/r/1CssNYcVmV/', post:'https://vt.tiktok.com/ZS4PJ8yar/' },
-    { n:'VDO Introduction (FB 1,175 / TT 3,000)',key:'vdo_intro',     b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null,
+    { n:'VDO Introduction (FB 1,175 / TT 3,000)',key:'vdo_intro',     b:4557, r:40000,  v:130000, e:0, ar:102700, av:145534, ae:134,
       fb:'https://www.facebook.com/share/r/1G6nJYeKyf/', post:'https://vt.tiktok.com/ZS4PJ1pox/' },
-    { n:'VDO Review (FB 1,175 / TT 3,000)',      key:'vdo_review',    b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null,
+    { n:'VDO Review (FB 1,175 / TT 3,000)',      key:'vdo_review',    b:4557, r:40000,  v:130000, e:0, ar:27949, av:35863, ae:39,
       fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', post:'https://vt.tiktok.com/ZS4PJa3Sw/' },
   ]},
   { name:'VDO Sampling', color:'#C97B3E', items:[
@@ -296,11 +284,11 @@ const GROUPS = [
     { n:'VDO Sampling Troop #4', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
   ]},
   { name:'AWO Content', color:'#E8829F', items:[
-    { n:'Photo AWO #1',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+    { n:'Photo AWO #1',       b:2000, r:60000, v:180000, e:267, ar:85068, av:120508, ae:593,
       fb:'https://www.facebook.com/share/p/1ET1Gh2W4j/' },
-    { n:'Photo AWO #2',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+    { n:'Photo AWO #2',       b:2000, r:60000, v:180000, e:267, ar:92077, av:126351, ae:628,
       fb:'https://www.facebook.com/share/p/1GYyv9o34T/' },
-    { n:'Photo album AWO #3', b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+    { n:'Photo album AWO #3', b:2000, r:60000, v:180000, e:267, ar:51824, av:75749, ae:481,
       fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
     { n:'Photo AWO #4',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
     { n:'Photo AWO #5',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
@@ -329,18 +317,25 @@ const GROUPS = [
 // งบที่ใช้จริง (Media) — เติมเมื่อปิดยอด
 const ACTUAL_SPEND = null;
 
-/* === LIVE DATA START === ห้ามแก้มือ · GitHub Actions เขียนทับทุก 30 นาที === */
-const LIVE = {};
-/* === LIVE DATA END === */
+/* ยอดสด TikTok — โหลดจาก scrape_results.json ตอนเปิดหน้า
+   GitHub Actions เขียนไฟล์นั้นไฟล์เดียว ไม่แตะ index.html เลย */
+let LIVE = {};
 
-// ยอดสด TikTok บวกทับค่าที่กรอกมือ (ฝั่ง Facebook) ให้อัตโนมัติ
-GROUPS.forEach(g => g.items.forEach(i => {
-  const d = i.key ? LIVE[i.key] : null;
-  if(!d) return;
-  i.live = d;
-  i.av = (i.av||0) + (d.views||0);
-  i.ae = (i.ae||0) + (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
-}));
+// เก็บค่าที่กรอกมือ (ฝั่ง Facebook) ไว้เป็นฐาน แล้วบวกยอด TikTok ทับทุกครั้งที่ render
+GROUPS.forEach(g => g.items.forEach(i => { i._av = i.av; i._ae = i.ae; }));
+
+function applyLive(){
+  GROUPS.forEach(g => g.items.forEach(i => {
+    const d = i.key ? LIVE[i.key] : null;
+    i.live = d || null;
+    i.av = i._av;
+    i.ae = i._ae;
+    if(d){
+      i.av = (i._av||0) + (d.views||0);
+      i.ae = (i._ae||0) + (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
+    }
+  }));
+}
 
 // ชิ้นงาน + ลิงก์โพสต์ (ที่ยังไม่มี ปล่อย link เป็น null → ขึ้น "รอลิงก์")
 const POSTS = [
@@ -405,6 +400,9 @@ const short = n => n>=1e6 ? (n/1e6).toFixed(n%1e6?1:0)+'M'
 // รวมค่าจริงแบบข้าม null (ถ้าไม่มีสักชิ้น = null)
 const asum = (a,k) => { const v=a.filter(x=>x[k]!=null); return v.length? v.reduce((s,x)=>s+x[k],0) : null; };
 const done  = (a,k) => a.filter(x=>x[k]!=null).length;
+
+function render(){
+applyLive();
 
 const totals = GROUPS.map(g => ({
   name:g.name, color:g.color, count:g.items.length, items:g.items,
@@ -580,6 +578,13 @@ document.getElementById('gRows').innerHTML = TIMELINE.map(t=>{
 
 document.getElementById('updated').textContent =
   'อัปเดต ' + new Date().toLocaleDateString('th-TH-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'});
+}
+
+render();
+fetch('scrape_results.json', {cache:'no-store'})
+  .then(r => r.ok ? r.json() : null)
+  .then(d => { if(d){ LIVE = d; render(); } })
+  .catch(() => {});
 </script>
 </body>
 </html>

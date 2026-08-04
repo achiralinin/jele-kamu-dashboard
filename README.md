@@ -7,8 +7,10 @@
 ## ระบบทำงานยังไง
 
 GitHub Actions รันทุก 30 นาที → `scripts/tiktok_scraper.py` ดึงยอดจากลิงก์โพสต์ TikTok ด้วย yt-dlp
-→ `scripts/update_dashboard.py` เขียนผลลงบล็อก `LIVE DATA` ใน `index.html` → commit + push
-→ GitHub Pages เสิร์ฟหน้าใหม่อัตโนมัติ
+→ commit ทับ `scrape_results.json` ไฟล์เดียว → `index.html` fetch ไฟล์นั้นตอนเปิดหน้า
+
+**Actions ไม่แตะ `index.html` เลย** ดีไซน์กับข้อมูลสดแยกไฟล์กันชัดเจน แก้หน้าเว็บด้วยมือได้ทุกเมื่อ
+โดยไม่ต้องกลัว merge conflict กับรอบ auto-update
 
 ยอด views จะไปเติมช่อง **View Actual** และ likes+comments+shares+saves ไปเติม **Engagement Actual**
 แล้วรวมขึ้นไปเป็นยอดกลุ่มและการ์ดบนสุดให้เอง
@@ -65,8 +67,10 @@ Actions → Auto Update Dashboard → Run workflow
 ```bash
 pip install -U yt-dlp
 python3 scripts/tiktok_scraper.py scrape_results.json
-python3 scripts/update_dashboard.py scrape_results.json index.html
 ```
+
+> เปิด `index.html` จาก `file://` ตรง ๆ จะไม่เห็นยอดสด (เบราว์เซอร์บล็อก fetch)
+> ให้ดูที่ GitHub Pages หรือรัน `python3 -m http.server` ในโฟลเดอร์นี้
 
 ## ที่มาข้อมูล
 
