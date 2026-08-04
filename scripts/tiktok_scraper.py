@@ -25,6 +25,12 @@ MANUAL_OVERRIDE = {
 #  KOL LINKS — key ต้องตรงกับ key ใน index.html
 # ============================================================
 KOL_LINKS = {
+    # --- คลิปแบรนด์ (Jele Chewy official) ---
+    "vdo_teaser": "https://vt.tiktok.com/ZS4PJLMF4/",
+    "vdo_launching": "https://vt.tiktok.com/ZS4PJ8yar/",
+    "vdo_intro": "https://vt.tiktok.com/ZS4PJ1pox/",
+    "vdo_review": "https://vt.tiktok.com/ZS4PJa3Sw/",
+    # --- KOL ---
     "chatangg": "https://vt.tiktok.com/ZS4yjnsWB/",
     "100lowteens": "https://vt.tiktok.com/ZS4U6vYTF/",
     "sristories.official": "https://vt.tiktok.com/ZS4UfB9Gu/",

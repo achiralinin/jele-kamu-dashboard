@@ -11,30 +11,41 @@ GitHub Actions รันทุก 30 นาที → `scripts/tiktok_scraper.py
 → GitHub Pages เสิร์ฟหน้าใหม่อัตโนมัติ
 
 ยอด views จะไปเติมช่อง **View Actual** และ likes+comments+shares+saves ไปเติม **Engagement Actual**
-ของ KOL แต่ละราย แล้วรวมขึ้นไปเป็นยอดกลุ่มและการ์ดบนสุดให้เอง
+แล้วรวมขึ้นไปเป็นยอดกลุ่มและการ์ดบนสุดให้เอง
 
-## เพิ่ม / แก้ลิงก์โพสต์ KOL
+ตอนนี้ดึงอัตโนมัติ 8 คลิป — คลิปแบรนด์ 4 (Teaser / Launching / Introduction / Review) + KOL 4
 
-แก้ `KOL_LINKS` ใน `scripts/tiktok_scraper.py` — key ต้องตรงกับ `key` ของ KOL ใน `index.html`
+## เพิ่ม / แก้ลิงก์โพสต์ TikTok
+
+แก้ `KOL_LINKS` ใน `scripts/tiktok_scraper.py` — key ต้องตรงกับ `key` ของแถวนั้นใน `index.html`
 
 ```python
 KOL_LINKS = {
+    "vdo_teaser": "https://vt.tiktok.com/ZS4PJLMF4/",
     "chatangg": "https://vt.tiktok.com/ZS4yjnsWB/",
 }
 ```
 
-## กรอกผลจริงที่ดึงอัตโนมัติไม่ได้ (Facebook / AWO / VDO)
+| key | ชิ้นงาน |
+|---|---|
+| `vdo_teaser` / `vdo_launching` / `vdo_intro` / `vdo_review` | คลิปแบรนด์ 4 ตัว |
+| `chatangg` / `100lowteens` / `sristories.official` / `foodballstylee` | KOL 4 ราย |
+
+## กรอกผลฝั่ง Facebook (ที่ดึงอัตโนมัติไม่ได้)
 
 แก้ในบล็อก `GROUPS` ของ `index.html` โดยตรง แต่ละแถวมี 3 ช่อง
 
 | ช่อง | ความหมาย |
 |---|---|
-| `ar` | Reach จริง |
-| `av` | View จริง |
-| `ae` | Engagement จริง |
+| `ar` | Reach จาก Facebook |
+| `av` | View จาก Facebook |
+| `ae` | Engagement จาก Facebook |
 
-ใส่ตัวเลขทับ `null` — ยอดรวมรายกลุ่ม การ์ดบนสุด และ % ความสำเร็จคำนวณต่อให้เอง
-งบที่ใช้จริงแก้ที่ `ACTUAL_SPEND`
+ใส่ตัวเลขทับ `null` ได้เลย **แถวไหนมี `key` ระบบจะเอายอด TikTok บวกทับให้อีกที**
+เช่น VDO Teaser กรอก `av:` เป็นยอดวิวฝั่ง FB อย่างเดียว แล้วยอด TikTok จะบวกเพิ่มเองทุกรอบ
+ยอดรวมรายกลุ่ม การ์ดบนสุด และ % ความสำเร็จคำนวณต่อให้เอง — งบที่ใช้จริงแก้ที่ `ACTUAL_SPEND`
+
+> TikTok ไม่เปิดตัวเลข reach ให้ดึง ช่อง Reach Actual จึงต้องกรอกมือทั้งหมด
 
 > อย่าแก้บล็อกระหว่าง `LIVE DATA START` / `LIVE DATA END` — Actions เขียนทับทุกรอบ
 

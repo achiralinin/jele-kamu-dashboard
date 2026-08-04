@@ -193,14 +193,14 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 <!-- ============ LIVE TIKTOK ============ -->
 <section>
   <div class="sec-head">
-    <h2>ยอดสด TikTok KOLs <span class="badge b-live" style="vertical-align:2px">AUTO</span></h2>
+    <h2>ยอดสด TikTok <span class="badge b-live" style="vertical-align:2px">AUTO</span></h2>
     <div class="note" id="liveStamp"></div>
   </div>
   <div class="tbl-wrap tbl-scroll">
     <table id="liveTable">
       <thead>
         <tr>
-          <th>KOL</th><th class="num">Views</th><th class="num">Likes</th>
+          <th>คลิป</th><th class="num">Views</th><th class="num">Likes</th>
           <th class="num">Comments</th><th class="num">Shares</th><th class="num">Saves</th>
           <th class="num">Engagement</th><th class="num">ER%</th><th class="num">CPV</th><th>โพสต์</th>
         </tr>
@@ -274,15 +274,20 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
    ======================================================================= */
 
 /* ผลจริงระดับชิ้นงาน: เติมที่ ar (Reach) / av (View) / ae (Engagement) ของแต่ละแถว
-   ยอดรวมรายกลุ่ม + การ์ดบนสุด + % ความสำเร็จ คำนวณต่อให้เองทั้งหมด
-   ปล่อย null ไว้ = ยังไม่มีข้อมูล จะขึ้นเป็นขีดสีเทา                               */
+   ช่องพวกนี้ใช้กรอก "ฝั่ง Facebook" ด้วยมือ (ดึงจาก Meta Business Suite)
+   แถวไหนมี key = มีคลิป TikTok ระบบจะบวกยอด TikTok ทับให้อัตโนมัติทุก 30 นาที
+   ยอดรวมรายกลุ่ม + การ์ดบนสุด + % ความสำเร็จ คำนวณต่อให้เองทั้งหมด            */
 
 const GROUPS = [
   { name:'VDO Launching', color:'#C8102E', items:[
-    { n:'VDO Teaser (FB 1,000 / TT 1,175)',      b:2775, r:30000,  v:90000,  e:0, ar:null, av:null, ae:null },
-    { n:'VDO Launching (FB 1,175 / TT 3,000)',   b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Introduction (FB 1,175 / TT 3,000)',b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Review (FB 1,175 / TT 3,000)',      b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Teaser (FB 1,000 / TT 1,175)',      key:'vdo_teaser',    b:2775, r:30000,  v:90000,  e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/1C38MZaxaV/', post:'https://vt.tiktok.com/ZS4PJLMF4/' },
+    { n:'VDO Launching (FB 1,175 / TT 3,000)',   key:'vdo_launching', b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/1CssNYcVmV/', post:'https://vt.tiktok.com/ZS4PJ8yar/' },
+    { n:'VDO Introduction (FB 1,175 / TT 3,000)',key:'vdo_intro',     b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/1G6nJYeKyf/', post:'https://vt.tiktok.com/ZS4PJ1pox/' },
+    { n:'VDO Review (FB 1,175 / TT 3,000)',      key:'vdo_review',    b:4557, r:40000,  v:130000, e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', post:'https://vt.tiktok.com/ZS4PJa3Sw/' },
   ]},
   { name:'VDO Sampling', color:'#C97B3E', items:[
     { n:'VDO Sampling Troop #1', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
@@ -291,9 +296,12 @@ const GROUPS = [
     { n:'VDO Sampling Troop #4', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
   ]},
   { name:'AWO Content', color:'#E8829F', items:[
-    { n:'Photo AWO #1',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo album AWO #2', b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo AWO #3',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #1',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/p/1ET1Gh2W4j/' },
+    { n:'Photo AWO #2',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/p/1GYyv9o34T/' },
+    { n:'Photo album AWO #3', b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
     { n:'Photo AWO #4',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
     { n:'Photo AWO #5',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
     { n:'Photo AWO #6',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
@@ -302,9 +310,9 @@ const GROUPS = [
   ]},
   { name:'Facebook Page', color:'#1877F2', items:[
     { n:'ผู้บริโภค',      b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
-      f:'3M',   fee:47000, url:'https://www.facebook.com/wecanchoose',        post:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
+      f:'3M',   fee:47000, url:'https://www.facebook.com/wecanchoose',        fb:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
     { n:'ชี้เป้าเซเว่น',   b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
-      f:'1.2M', fee:38000, url:'https://www.facebook.com/share/1Aq9n7d9vU/',  post:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
+      f:'1.2M', fee:38000, url:'https://www.facebook.com/share/1Aq9n7d9vU/',  fb:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
   ]},
   { name:'TikTok KOLs', color:'#2A6E5E', items:[
     { n:'foodballstylee',      key:'foodballstylee',      b:10000, r:300000, v:900000, e:0, ar:null, av:null, ae:null,
@@ -363,39 +371,46 @@ const LIVE = {
 };
 /* === LIVE DATA END === */
 
-// เอายอดสดจาก TikTok มาเติมช่อง Actual ของ KOL อัตโนมัติ
+// ยอดสด TikTok บวกทับค่าที่กรอกมือ (ฝั่ง Facebook) ให้อัตโนมัติ
 GROUPS.forEach(g => g.items.forEach(i => {
-  const d = i.key && LIVE[i.key];
+  const d = i.key ? LIVE[i.key] : null;
   if(!d) return;
-  i.av = d.views || 0;
-  i.ae = (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
   i.live = d;
+  i.av = (i.av||0) + (d.views||0);
+  i.ae = (i.ae||0) + (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
 }));
 
 // ชิ้นงาน + ลิงก์โพสต์ (ที่ยังไม่มี ปล่อย link เป็น null → ขึ้น "รอลิงก์")
 const POSTS = [
-  { n:'VDO Teaser',            ch:'FB+TT', by:'Brand',              date:'2026-07-21', st:'live',   link:null },
-  { n:'VDO Launching',         ch:'FB+TT', by:'Brand',              date:'2026-07-24', st:'live',   link:null },
-  { n:'VDO Introduction',      ch:'FB+TT', by:'Brand',              date:'2026-07-25', st:'live',   link:null },
-  { n:'Photo AWO #1',          ch:'FB',    by:'Brand',              date:'2026-07-28', st:'live',   link:null },
-  { n:'Photo AWO #2',          ch:'FB',    by:'Brand',              date:'2026-07-29', st:'live',   link:null },
-  { n:'Photo album AWO #3',    ch:'FB',    by:'Brand',              date:'2026-07-31', st:'live',   link:null },
-  { n:'VDO Review',            ch:'FB+TT', by:'Brand',              date:'2026-08-02', st:'live',   link:null },
-  { n:'Photo AWO activity #4', ch:'FB',    by:'Brand',              date:'2026-08-05', st:'wait',   link:null },
-  { n:'Photo AWO เจเล่แก้มป่อง #5', ch:'FB', by:'Brand',            date:'2026-08-12', st:'wait',   link:null },
-  { n:'Photo AWO #6',          ch:'FB',    by:'Brand',              date:'-',          st:'wait',   link:null },
-  { n:'Photo AWO #7',          ch:'FB',    by:'Brand',              date:'-',          st:'wait',   link:null },
-  { n:'Photo AWO #8',          ch:'FB',    by:'Brand',              date:'-',          st:'wait',   link:null },
-  { n:'VDO Sampling Troop #1', ch:'FB+TT', by:'Brand',              date:'2026-08-11', st:'wait',   link:null },
-  { n:'VDO Sampling Troop #2', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait',   link:null },
-  { n:'VDO Sampling Troop #3', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait',   link:null },
-  { n:'VDO Sampling Troop #4', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait',   link:null },
-  { n:'KOL Post — chatangg',            ch:'TT', by:'chatangg',            date:'2026-08-03', st:'live',   link:'https://vt.tiktok.com/ZS4yjnsWB/' },
-  { n:'KOL Post — 100lowteens',         ch:'TT', by:'100lowteens',         date:'2026-08-03', st:'live',   link:'https://vt.tiktok.com/ZS4U6vYTF/' },
-  { n:'KOL Post — sristories.official', ch:'TT', by:'sristories.official', date:'2026-08-03', st:'live',   link:'https://vt.tiktok.com/ZS4UfB9Gu/' },
-  { n:'KOL Post — foodballstylee',      ch:'TT', by:'foodballstylee',      date:'2026-08-03', st:'review', link:'https://vt.tiktok.com/ZS4U7ftpy/' },
-  { n:'Page Post — ชี้เป้าเซเว่น',      ch:'FB', by:'ชี้เป้าเซเว่น',       date:'2026-07-23', st:'live',   link:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
-  { n:'Page Post — ผู้บริโภค',          ch:'FB', by:'ผู้บริโภค',           date:'2026-08-01', st:'live',   link:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
+  { n:'VDO Teaser',            ch:'FB+TT', by:'Brand', date:'2026-07-21', st:'live',
+    fb:'https://www.facebook.com/share/r/1C38MZaxaV/', tt:'https://vt.tiktok.com/ZS4PJLMF4/' },
+  { n:'VDO Launching',         ch:'FB+TT', by:'Brand', date:'2026-07-24', st:'live',
+    fb:'https://www.facebook.com/share/r/1CssNYcVmV/', tt:'https://vt.tiktok.com/ZS4PJ8yar/' },
+  { n:'VDO Introduction',      ch:'FB+TT', by:'Brand', date:'2026-07-25', st:'live',
+    fb:'https://www.facebook.com/share/r/1G6nJYeKyf/', tt:'https://vt.tiktok.com/ZS4PJ1pox/' },
+  { n:'Photo AWO #1',          ch:'FB',    by:'Brand', date:'2026-07-28', st:'live',
+    fb:'https://www.facebook.com/share/p/1ET1Gh2W4j/' },
+  { n:'Photo AWO #2',          ch:'FB',    by:'Brand', date:'2026-07-29', st:'live',
+    fb:'https://www.facebook.com/share/p/1GYyv9o34T/' },
+  { n:'Photo album AWO #3',    ch:'FB',    by:'Brand', date:'2026-07-31', st:'live',
+    fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
+  { n:'VDO Review',            ch:'FB+TT', by:'Brand', date:'2026-08-02', st:'live',
+    fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', tt:'https://vt.tiktok.com/ZS4PJa3Sw/' },
+  { n:'Photo AWO activity #4', ch:'FB',    by:'Brand',              date:'2026-08-05', st:'wait' },
+  { n:'Photo AWO เจเล่แก้มป่อง #5', ch:'FB', by:'Brand',            date:'2026-08-12', st:'wait' },
+  { n:'Photo AWO #6',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
+  { n:'Photo AWO #7',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
+  { n:'Photo AWO #8',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
+  { n:'VDO Sampling Troop #1', ch:'FB+TT', by:'Brand',              date:'2026-08-11', st:'wait' },
+  { n:'VDO Sampling Troop #2', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait' },
+  { n:'VDO Sampling Troop #3', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait' },
+  { n:'VDO Sampling Troop #4', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait' },
+  { n:'KOL Post — chatangg',            ch:'TT', by:'chatangg',            date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4yjnsWB/' },
+  { n:'KOL Post — 100lowteens',         ch:'TT', by:'100lowteens',         date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4U6vYTF/' },
+  { n:'KOL Post — sristories.official', ch:'TT', by:'sristories.official', date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4UfB9Gu/' },
+  { n:'KOL Post — foodballstylee',      ch:'TT', by:'foodballstylee',      date:'2026-08-03', st:'review', tt:'https://vt.tiktok.com/ZS4U7ftpy/' },
+  { n:'Page Post — ชี้เป้าเซเว่น',      ch:'FB', by:'ชี้เป้าเซเว่น',       date:'2026-07-23', st:'live',   fb:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
+  { n:'Page Post — ผู้บริโภค',          ch:'FB', by:'ผู้บริโภค',           date:'2026-08-01', st:'live',   fb:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
 ];
 
 // Gantt: start = index วันที่ (0 = 20 ก.ค. 2026), len = จำนวนวัน
@@ -539,12 +554,13 @@ document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
     <td><a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a></td></tr>`;
   const eng = (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
   const er  = d.views ? (eng/d.views*100).toFixed(2)+'%' : '–';
-  const cpv = d.views ? ((i.fee+i.b)/d.views).toFixed(3) : '–';
-  return `<tr><td style="font-weight:600">${i.n}<span class="meta-line">${i.f} followers</span></td>
+  const cpv = d.views ? ((i.fee||0)+i.b)/d.views : null;
+  return `<tr><td style="font-weight:600">${i.n}<span class="meta-line">${i.f?i.f+' followers':'คลิปแบรนด์'}</span></td>
     <td class="num" style="font-weight:700">${fmt(d.views||0)}</td>
     <td class="num">${fmt(d.likes||0)}</td><td class="num">${fmt(d.comments||0)}</td>
     <td class="num">${fmt(d.shares||0)}</td><td class="num">${fmt(d.saves||0)}</td>
-    <td class="num">${fmt(eng)}</td><td class="num">${er}</td><td class="num">${cpv}</td>
+    <td class="num">${fmt(eng)}</td><td class="num">${er}</td>
+    <td class="num">${cpv==null?'–':cpv.toFixed(3)}</td>
     <td><a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a></td></tr>`;
 }).join('') + (()=>{
   const got = liveItems.filter(i=>i.live);
@@ -567,14 +583,16 @@ const CH = { 'TT':'<span class="badge b-tt">TikTok</span>', 'FB':'<span class="b
              'FB+TT':'<span class="badge b-fb">FB</span> <span class="badge b-tt">TT</span>' };
 document.querySelector('#postTable tbody').innerHTML = POSTS.map(p=>{
   const [cls,label] = ST[p.st];
-  const link = p.link ? `<a class="link" href="${p.link}" target="_blank" rel="noopener">เปิดโพสต์ ↗</a>`
-                      : `<span class="dash">รอลิงก์</span>`;
+  const parts = [];
+  if(p.fb) parts.push(`<a class="link" href="${p.fb}" target="_blank" rel="noopener">FB ↗</a>`);
+  if(p.tt) parts.push(`<a class="link" href="${p.tt}" target="_blank" rel="noopener">TT ↗</a>`);
+  const link = parts.length ? parts.join(' <span class="dash">·</span> ') : `<span class="dash">รอลิงก์</span>`;
   const d = p.date==='-' ? '<span class="dash">–</span>'
           : new Date(p.date).toLocaleDateString('th-TH-u-ca-gregory',{day:'numeric',month:'short'});
   return `<tr><td style="font-weight:500">${p.n}</td><td>${CH[p.ch]}</td><td>${p.by}</td>
     <td style="white-space:nowrap">${d}</td><td><span class="badge ${cls}">${label}</span></td><td>${link}</td></tr>`;
 }).join('');
-const withLink = POSTS.filter(p=>p.link).length;
+const withLink = POSTS.filter(p=>p.fb||p.tt).length;
 document.getElementById('linkCount').textContent = `มีลิงก์แล้ว ${withLink} / ${POSTS.length} ชิ้น`;
 
 // -- gantt
