@@ -38,7 +38,7 @@ KOL_LINKS = {
 }
 
 
-def scrape_tiktok_video(url, timeout=60):
+def scrape_tiktok_video(url, timeout=25):
     """ดึง metadata ของคลิป TikTok ด้วย yt-dlp --dump-json"""
     try:
         result = subprocess.run(
@@ -47,16 +47,8 @@ def scrape_tiktok_video(url, timeout=60):
         )
 
         if result.returncode != 0:
-            if 'comfortable' in result.stderr or 'Log in' in result.stderr:
-                print("    Age-restricted, retrying with --age-limit 99...")
-                result = subprocess.run(
-                    ['yt-dlp', '--dump-json', '--no-download', '--no-warnings',
-                     '--age-limit', '99', url],
-                    capture_output=True, text=True, timeout=timeout
-                )
-            if result.returncode != 0:
-                print(f"    yt-dlp error: {result.stderr.strip()[:200]}")
-                return None
+            print(f"    yt-dlp error: {result.stderr.strip()[:160]}")
+            return None
 
         info = json.loads(result.stdout)
         return {
