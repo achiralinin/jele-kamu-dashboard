@@ -1,1 +1,57 @@
-{}
+{
+  "vdo_teaser": {
+    "fb_views": 123748,
+    "fb_reach": 91692,
+    "fb_eng": 64
+  },
+  "vdo_launching": {
+    "fb_views": 131564,
+    "fb_reach": 84346,
+    "fb_eng": 114
+  },
+  "vdo_intro": {
+    "fb_views": 145534,
+    "fb_reach": 102700,
+    "fb_eng": 134
+  },
+  "vdo_review": {
+    "fb_views": 138654,
+    "fb_reach": 84148,
+    "fb_eng": 62
+  },
+  "awo_1": {
+    "fb_views": 120508,
+    "fb_reach": 85068,
+    "fb_eng": 593
+  },
+  "awo_2": {
+    "fb_views": 126351,
+    "fb_reach": 92077,
+    "fb_eng": 628
+  },
+  "awo_3": {
+    "fb_views": 170786,
+    "fb_reach": 89234,
+    "fb_eng": 500
+  },
+  "awo_4": {
+    "fb_views": 207015,
+    "fb_reach": 123798,
+    "fb_eng": 598
+  },
+  "awo_5": {
+    "fb_views": 221493,
+    "fb_reach": 220104,
+    "fb_eng": 403
+  },
+  "page_consumer": {
+    "fb_views": 143967,
+    "fb_reach": 737727,
+    "fb_eng": 5823
+  },
+  "page_cheepao": {
+    "fb_views": 1453861,
+    "fb_reach": 711010,
+    "fb_eng": 2058
+  }
+}
