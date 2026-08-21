@@ -33,7 +33,24 @@ KOL_LINKS = {
 | `vdo_teaser` / `vdo_launching` / `vdo_intro` / `vdo_review` | คลิปแบรนด์ 4 ตัว |
 | `chatangg` / `100lowteens` / `sristories.official` / `foodballstylee` | KOL 4 ราย |
 
-## กรอกผลฝั่ง Facebook (ที่ดึงอัตโนมัติไม่ได้)
+## กรอกผลฝั่ง Facebook — ใช้ฟอร์มบนหน้าเว็บ (แนะนำ)
+
+เปิดแดชบอร์ด → กดปุ่ม **＋ กรอกยอด Facebook** (อยู่ข้างหัวข้อ "KPI แยกตามกลุ่มงาน")
+→ กรอก Views / Reach / Engagement ฝั่ง Facebook (ช่องที่มีเลขอยู่แล้วคือค่าปัจจุบัน แก้ทับได้)
+→ กด **Copy JSON** → กด **เปิดไฟล์บน GitHub** → วางทับทั้งไฟล์ `manual_stats.json` → Commit
+
+หน้าเว็บจะอัปเดตทันทีที่ commit เสร็จ ไม่ต้องแก้โค้ด ไม่ต้อง push จากเครื่อง
+
+| ช่องในฟอร์ม | ไปอยู่ที่ |
+|---|---|
+| FB Views | View Actual (บวกกับยอด TikTok ถ้าชิ้นนั้นมีคลิป) |
+| FB Reach | Reach Actual (TikTok ไม่เปิดให้ดึง reach จึงมาจาก FB ล้วน) |
+| FB Eng. | Engagement Actual (บวกกับ TikTok เช่นกัน) |
+
+> `manual_stats.json` มีค่าเมื่อไหร่ จะ**ทับ**ค่า `ar/av/ae` ที่ hardcode ไว้ใน `index.html`
+> เว้นช่องว่าง = ใช้ค่าเดิม ไม่ได้แปลว่าศูนย์
+
+## แก้ผลฝั่ง Facebook ในโค้ดโดยตรง (ทางสำรอง)
 
 แก้ในบล็อก `GROUPS` ของ `index.html` โดยตรง แต่ละแถวมี 3 ช่อง
 

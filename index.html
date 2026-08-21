@@ -108,6 +108,26 @@ a.link:hover{border-bottom-color:var(--jele)}
 .share-bar{height:9px;background:#F0F1F3;border-radius:999px;overflow:hidden}
 .share-bar i{display:block;height:100%;border-radius:999px}
 
+/* ---------- buttons + manual entry modal ---------- */
+.btn{padding:8px 16px;border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.btn-primary{background:var(--jele);color:#fff}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{background:#F5F6F7}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-start;justify-content:center;padding:32px 16px;z-index:60;overflow-y:auto}
+.modal.open{display:flex}
+.modal-box{background:#fff;border-radius:14px;padding:24px;max-width:720px;width:100%}
+.modal-box h3{font-size:1.15rem;margin-bottom:4px}
+.modal-box p.hint{font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.55}
+.mgrp{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 6px;padding-top:10px;border-top:1px solid var(--line)}
+.fld{display:grid;grid-template-columns:1fr 92px 92px 92px;gap:8px;align-items:center;margin-bottom:7px;font-size:.82rem}
+.fld input{padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:.82rem;width:100%;text-align:right}
+.fld input:focus{outline:2px solid var(--jele);outline-offset:-1px}
+.fld .fname{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fld-head{color:var(--muted);font-size:.7rem;text-transform:uppercase;font-weight:700;position:sticky;top:0;background:#fff}
+.fld-head span:not(.fname){text-align:right}
+textarea#jsonOut{width:100%;height:140px;border:1px solid var(--line);border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,monospace;font-size:.74rem;margin-top:12px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;align-items:center}
+#copyMsg{font-size:.8rem;color:#0F7A44;font-weight:600;margin-right:auto}
 footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 </style>
 </head>
@@ -140,7 +160,10 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 <section>
   <div class="sec-head">
     <h2>KPI แยกตามกลุ่มงาน — Plan vs Actual</h2>
-    <div class="note">ช่อง Actual ว่าง = ยังไม่ได้กรอกผลจริง · ชิป % คือความสำเร็จเทียบเป้า</div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span class="note">ช่อง Actual ว่าง = ยังไม่ได้กรอกผลจริง · ชิป % คือความสำเร็จเทียบเป้า</span>
+      <button class="btn btn-primary" onclick="openManual()">＋ กรอกยอด Facebook</button>
+    </div>
   </div>
   <div class="tbl-wrap tbl-scroll">
     <table id="groupTable">
@@ -249,6 +272,28 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
   </div>
 </section>
 
+<!-- ============ MANUAL FACEBOOK ENTRY ============ -->
+<div class="modal" id="manualModal">
+  <div class="modal-box">
+    <h3>กรอกยอด Facebook / Reach</h3>
+    <p class="hint">
+      TikTok ดึงอัตโนมัติอยู่แล้ว ส่วนนี้สำหรับตัวเลขที่ดึงไม่ได้ — <b>Views / Reach / Engagement ฝั่ง Facebook</b>
+      (เอาจาก Meta Business Suite)<br>
+      ช่องที่มีเลขอยู่แล้วคือค่าปัจจุบัน แก้ทับได้เลย · เว้นว่าง = ใช้ค่าเดิม<br>
+      กรอกเสร็จกด <b>Copy JSON</b> → กด <b>เปิดไฟล์บน GitHub</b> → วางทับทั้งไฟล์ → Commit เป็นอันจบ
+    </p>
+    <div class="fld fld-head"><span class="fname">ชิ้นงาน</span><span>FB Views</span><span>FB Reach</span><span>FB Eng.</span></div>
+    <div id="manualFields"></div>
+    <textarea id="jsonOut" readonly placeholder="กด Copy JSON แล้ว JSON จะขึ้นตรงนี้ (คัดลอกให้อัตโนมัติ)"></textarea>
+    <div class="modal-actions">
+      <span id="copyMsg"></span>
+      <button class="btn btn-ghost" onclick="closeManual()">ปิด</button>
+      <a class="btn btn-ghost" href="https://github.com/achiralinin/jele-kamu-dashboard/edit/main/manual_stats.json" target="_blank" rel="noopener">เปิดไฟล์บน GitHub ↗</a>
+      <button class="btn btn-primary" onclick="buildManualJson()">Copy JSON</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   <span>ที่มาข้อมูล: Client_Sheet_JELE CHEWY X KAMU KAMU — June2026.xlsx (ชีต KPI · Working · KOL List · Timeline)</span>
   <span>จัดทำโดย ลินิน</span>
@@ -268,38 +313,38 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 const GROUPS = [
   { name:'VDO Launching', color:'#C8102E', items:[
-    { n:'VDO Teaser (FB 1,000 / TT 1,175)',      key:'vdo_teaser',    b:2775, r:30000,  v:90000,  e:0, ar:91692, av:123748, ae:64,
+    { n:'VDO Teaser (FB 1,000 / TT 1,175)',      mk:'vdo_teaser', key:'vdo_teaser',    b:2775, r:30000,  v:90000,  e:0, ar:91692, av:123748, ae:64,
       fb:'https://www.facebook.com/share/r/1C38MZaxaV/', post:'https://vt.tiktok.com/ZS4PJLMF4/' },
-    { n:'VDO Launching (FB 1,175 / TT 3,000)',   key:'vdo_launching', b:4557, r:40000,  v:130000, e:0, ar:84346, av:131564, ae:114,
+    { n:'VDO Launching (FB 1,175 / TT 3,000)',   mk:'vdo_launching', key:'vdo_launching', b:4557, r:40000,  v:130000, e:0, ar:84346, av:131564, ae:114,
       fb:'https://www.facebook.com/share/r/1CssNYcVmV/', post:'https://vt.tiktok.com/ZS4PJ8yar/' },
-    { n:'VDO Introduction (FB 1,175 / TT 3,000)',key:'vdo_intro',     b:4557, r:40000,  v:130000, e:0, ar:102700, av:145534, ae:134,
+    { n:'VDO Introduction (FB 1,175 / TT 3,000)',mk:'vdo_intro', key:'vdo_intro',     b:4557, r:40000,  v:130000, e:0, ar:102700, av:145534, ae:134,
       fb:'https://www.facebook.com/share/r/1G6nJYeKyf/', post:'https://vt.tiktok.com/ZS4PJ1pox/' },
-    { n:'VDO Review (FB 1,175 / TT 3,000)',      key:'vdo_review',    b:4557, r:40000,  v:130000, e:0, ar:27949, av:35863, ae:39,
+    { n:'VDO Review (FB 1,175 / TT 3,000)',      mk:'vdo_review', key:'vdo_review',    b:4557, r:40000,  v:130000, e:0, ar:27949, av:35863, ae:39,
       fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', post:'https://vt.tiktok.com/ZS4PJa3Sw/' },
   ]},
   { name:'VDO Sampling', color:'#C97B3E', items:[
-    { n:'VDO Sampling Troop #1', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Sampling Troop #2', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Sampling Troop #3', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Sampling Troop #4', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #1', mk:'sampling_1', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #2', mk:'sampling_2', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #3', mk:'sampling_3', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #4', mk:'sampling_4', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
   ]},
   { name:'AWO Content', color:'#E8829F', items:[
-    { n:'Photo AWO #1',       b:2000, r:60000, v:180000, e:267, ar:85068, av:120508, ae:593,
+    { n:'Photo AWO #1', mk:'awo_1',       b:2000, r:60000, v:180000, e:267, ar:85068, av:120508, ae:593,
       fb:'https://www.facebook.com/share/p/1ET1Gh2W4j/' },
-    { n:'Photo AWO #2',       b:2000, r:60000, v:180000, e:267, ar:92077, av:126351, ae:628,
+    { n:'Photo AWO #2', mk:'awo_2',       b:2000, r:60000, v:180000, e:267, ar:92077, av:126351, ae:628,
       fb:'https://www.facebook.com/share/p/1GYyv9o34T/' },
-    { n:'Photo album AWO #3', b:2000, r:60000, v:180000, e:267, ar:51824, av:75749, ae:481,
+    { n:'Photo album AWO #3', mk:'awo_3', b:2000, r:60000, v:180000, e:267, ar:51824, av:75749, ae:481,
       fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
-    { n:'Photo AWO #4',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo AWO #5',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo AWO #6',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo AWO #7',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo AWO #8',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #4', mk:'awo_4',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #5', mk:'awo_5',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #6', mk:'awo_6',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #7', mk:'awo_7',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #8', mk:'awo_8',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
   ]},
   { name:'Facebook Page', color:'#1877F2', items:[
-    { n:'ผู้บริโภค',      b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
+    { n:'ผู้บริโภค', mk:'page_consumer',      b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
       f:'3M',   fee:47000, url:'https://www.facebook.com/wecanchoose',        fb:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
-    { n:'ชี้เป้าเซเว่น',   b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
+    { n:'ชี้เป้าเซเว่น', mk:'page_cheepao',   b:20000, r:700000, v:2000000, e:2667, ar:null, av:null, ae:null,
       f:'1.2M', fee:38000, url:'https://www.facebook.com/share/1Aq9n7d9vU/',  fb:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
   ]},
   { name:'TikTok KOLs', color:'#2A6E5E', items:[
@@ -317,22 +362,33 @@ const GROUPS = [
 // งบที่ใช้จริง (Media) — เติมเมื่อปิดยอด
 const ACTUAL_SPEND = null;
 
-/* ยอดสด TikTok — โหลดจาก scrape_results.json ตอนเปิดหน้า
-   GitHub Actions เขียนไฟล์นั้นไฟล์เดียว ไม่แตะ index.html เลย */
+/* ข้อมูลสด 2 ไฟล์ — โหลดตอนเปิดหน้า ไม่ฝังใน index.html
+   scrape_results.json : GitHub Actions เขียน (TikTok อัตโนมัติทุก 30 นาที)
+   manual_stats.json   : นิคเขียนผ่านฟอร์มในหน้านี้ (Facebook / Reach) */
 let LIVE = {};
+let MANUAL = {};
 
-// เก็บค่าที่กรอกมือ (ฝั่ง Facebook) ไว้เป็นฐาน แล้วบวกยอด TikTok ทับทุกครั้งที่ render
-GROUPS.forEach(g => g.items.forEach(i => { i._av = i.av; i._ae = i.ae; }));
+// ค่า FB ที่ hardcode ไว้ตอนแรก = ค่าตั้งต้น ถ้า manual_stats.json มีค่าจะใช้ตัวนั้นแทน
+GROUPS.forEach(g => g.items.forEach(i => { i._ar = i.ar; i._av = i.av; i._ae = i.ae; }));
+
+function fbBase(i){
+  const m = i.mk ? MANUAL[i.mk] : null;          // mk = id ประจำแถว ใช้จับคู่กับฟอร์ม
+  if(!m) return { r:i._ar, v:i._av, e:i._ae };
+  const pick = (a,b) => (a===undefined || a===null || a==='') ? b : Number(a);
+  return { r:pick(m.fb_reach, i._ar), v:pick(m.fb_views, i._av), e:pick(m.fb_eng, i._ae) };
+}
 
 function applyLive(){
   GROUPS.forEach(g => g.items.forEach(i => {
     const d = i.key ? LIVE[i.key] : null;
+    const fb = fbBase(i);
     i.live = d || null;
-    i.av = i._av;
-    i.ae = i._ae;
-    if(d){
-      i.av = (i._av||0) + (d.views||0);
-      i.ae = (i._ae||0) + (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
+    i.ar = fb.r;                                  // Reach = Facebook เท่านั้น (TikTok ไม่เปิดให้ดึง)
+    i.av = fb.v;
+    i.ae = fb.e;
+    if(d){                                        // มีคลิป TikTok → บวกทับฐาน Facebook
+      i.av = (fb.v||0) + (d.views||0);
+      i.ae = (fb.e||0) + (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
     }
   }));
 }
@@ -580,11 +636,62 @@ document.getElementById('updated').textContent =
   'อัปเดต ' + new Date().toLocaleDateString('th-TH-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'});
 }
 
+/* ---------- ฟอร์มกรอกยอด Facebook ---------- */
+function openManual(){
+  let html='';
+  GROUPS.forEach(g=>{
+    const rows = g.items.filter(i=>i.mk);            // เฉพาะแถวที่มี id ให้จับคู่
+    if(!rows.length) return;
+    html += `<div class="mgrp">${g.name}</div>`;
+    rows.forEach(i=>{
+      const m = MANUAL[i.mk] || {};
+      const cur = k => (m[k]!==undefined && m[k]!==null && m[k]!=='') ? m[k] : '';
+      const seed = (m.fb_views==null && i._av!=null) ? i._av : cur('fb_views');
+      const seedR = (m.fb_reach==null && i._ar!=null) ? i._ar : cur('fb_reach');
+      const seedE = (m.fb_eng==null && i._ae!=null) ? i._ae : cur('fb_eng');
+      html += `<div class="fld"><span class="fname" title="${i.n}">${i.n}</span>
+        <input type="number" min="0" data-k="${i.mk}" data-f="fb_views" value="${seed}" placeholder="views">
+        <input type="number" min="0" data-k="${i.mk}" data-f="fb_reach" value="${seedR}" placeholder="reach">
+        <input type="number" min="0" data-k="${i.mk}" data-f="fb_eng"  value="${seedE}" placeholder="eng"></div>`;
+    });
+  });
+  document.getElementById('manualFields').innerHTML = html;
+  document.getElementById('copyMsg').textContent = '';
+  document.getElementById('jsonOut').value = '';
+  document.getElementById('manualModal').classList.add('open');
+}
+function closeManual(){ document.getElementById('manualModal').classList.remove('open'); }
+function buildManualJson(){
+  const out={};
+  document.querySelectorAll('#manualFields input').forEach(inp=>{
+    if(inp.value==='') return;
+    const v=Number(inp.value); if(!isFinite(v)) return;
+    (out[inp.dataset.k] = out[inp.dataset.k] || {})[inp.dataset.f] = v;
+  });
+  const txt=JSON.stringify(out,null,2);
+  const ta=document.getElementById('jsonOut'); ta.value=txt;
+  ta.select();
+  let ok=false;
+  try{ ok=document.execCommand('copy'); }catch(e){}
+  if(!ok && navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>{},()=>{}); ok=true; }
+  document.getElementById('copyMsg').textContent =
+    (ok?'✓ คัดลอกแล้ว':'คัดลอกเองจากกล่องด้านบน') + ` · ${Object.keys(out).length} ชิ้นงาน`;
+  // ให้เห็นผลทันทีบนหน้าจอ (ยังไม่ถาวรจนกว่าจะ commit ไฟล์)
+  MANUAL = out; render();
+}
+document.getElementById('manualModal').addEventListener('click', e=>{
+  if(e.target.id==='manualModal') closeManual();
+});
+
 render();
-fetch('scrape_results.json', {cache:'no-store'})
-  .then(r => r.ok ? r.json() : null)
-  .then(d => { if(d){ LIVE = d; render(); } })
-  .catch(() => {});
+Promise.all([
+  fetch('scrape_results.json', {cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
+  fetch('manual_stats.json',   {cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})),
+]).then(([live, manual])=>{
+  LIVE = live || {};
+  MANUAL = manual || {};
+  render();
+});
 </script>
 </body>
 </html>
