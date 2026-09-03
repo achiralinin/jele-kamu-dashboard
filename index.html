@@ -308,7 +308,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 /* ผลจริงระดับชิ้นงาน: เติมที่ ar (Reach) / av (View) / ae (Engagement) ของแต่ละแถว
    ช่องพวกนี้ใช้กรอก "ฝั่ง Facebook" ด้วยมือ (ดึงจาก Meta Business Suite)
-   แถวไหนมี key = มีคลิป TikTok ระบบจะบวกยอด TikTok ทับให้อัตโนมัติทุก 30 นาที
+   แถวไหนมี key = มีคลิป TikTok ระบบจะบวกยอด TikTok ทับให้อัตโนมัติทุกรอบที่ Actions รัน
    ยอดรวมรายกลุ่ม + การ์ดบนสุด + % ความสำเร็จ คำนวณต่อให้เองทั้งหมด            */
 
 const GROUPS = [
@@ -363,7 +363,7 @@ const GROUPS = [
 const ACTUAL_SPEND = null;
 
 /* ข้อมูลสด 2 ไฟล์ — โหลดตอนเปิดหน้า ไม่ฝังใน index.html
-   scrape_results.json : GitHub Actions เขียน (TikTok อัตโนมัติทุก 30 นาที)
+   scrape_results.json : GitHub Actions เขียน (TikTok อัตโนมัติ)
    manual_stats.json   : นิคเขียนผ่านฟอร์มในหน้านี้ (Facebook / Reach) */
 let LIVE = {};
 let MANUAL = {};
@@ -378,6 +378,16 @@ function fbBase(i){
   return { r:pick(m.fb_reach, i._ar), v:pick(m.fb_views, i._av), e:pick(m.fb_eng, i._ae) };
 }
 
+function dataAge(stamp){
+  if(!stamp) return '';
+  const t = Date.parse(stamp.replace(' ','T')+'Z');
+  if(isNaN(t)) return '';
+  const m = Math.max(0, Math.round((Date.now()-t)/60000));
+  if(m < 90) return `ข้อมูลอายุ ${m} นาที`;
+  const h = Math.floor(m/60);
+  if(h < 24) return `ข้อมูลอายุ ${h} ชม. ${m%60} นาที`;
+  return `ข้อมูลอายุ ${Math.floor(h/24)} วัน ${h%24} ชม.`;
+}
 function applyLive(){
   GROUPS.forEach(g => g.items.forEach(i => {
     const d = i.key ? LIVE[i.key] : null;
@@ -566,7 +576,7 @@ const liveItems = ALL_ITEMS.filter(i=>i.key);
 document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
   const d = i.live;
   if(!d) return `<tr><td style="font-weight:600">${i.n}</td>
-    <td colspan="8" style="color:var(--wait)">รอรอบดึงข้อมูลถัดไป — ระบบดึงอัตโนมัติทุก 30 นาที</td>
+    <td colspan="8" style="color:var(--wait)">รอรอบดึงข้อมูลถัดไป — ระบบดึงอัตโนมัติเป็นระยะ (GitHub Actions)</td>
     <td><a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a></td></tr>`;
   const eng = (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
   const er  = d.views ? (eng/d.views*100).toFixed(2)+'%' : '–';
@@ -590,7 +600,7 @@ document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
     <td class="num">${s('views')?(eng/s('views')*100).toFixed(2)+'%':'–'}</td><td></td><td></td></tr>`;
 })();
 document.getElementById('liveStamp').innerHTML = LIVE._updated
-  ? `ดึงล่าสุด ${LIVE._updated} (UTC) · ระบบรันทุก 30 นาที · CPV = (ค่าตัว + media) ÷ views`
+  ? `ดึงล่าสุด ${LIVE._updated} (UTC) · ${dataAge(LIVE._updated)} · CPV = (ค่าตัว + media) ÷ views`
   : `ยังไม่มีข้อมูล — รอ GitHub Actions รันรอบแรก · CPV = (ค่าตัว + media) ÷ views`;
 
 // -- posts
