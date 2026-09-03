@@ -45,7 +45,7 @@
     "fb_eng": 403
   },
   "page_consumer": {
-    "fb_views": 1939607,
+    "fb_views": 2465311,
     "fb_reach": 737727,
     "fb_eng": 5823
   },
@@ -53,5 +53,64 @@
     "fb_views": 2178000,
     "fb_reach": 711010,
     "fb_eng": 2729
-  }
+  },
+  "_tiktok": {
+    "vdo_teaser": {
+      "views": 241000,
+      "likes": 136,
+      "comments": 1,
+      "shares": 4,
+      "saves": 10
+    },
+    "vdo_launching": {
+      "views": 283000,
+      "likes": 151,
+      "comments": 3,
+      "shares": 5,
+      "saves": 19
+    },
+    "vdo_intro": {
+      "views": 275100,
+      "likes": 167,
+      "comments": 3,
+      "shares": 15,
+      "saves": 11
+    },
+    "vdo_review": {
+      "views": 261600,
+      "likes": 120,
+      "comments": 0,
+      "shares": 18,
+      "saves": 11
+    },
+    "foodballstylee": {
+      "views": 1100000,
+      "likes": 785,
+      "comments": 4,
+      "shares": 18,
+      "saves": 69
+    },
+    "chatangg": {
+      "views": 970000,
+      "likes": 551,
+      "comments": 8,
+      "shares": 23,
+      "saves": 63
+    },
+    "100lowteens": {
+      "views": 950200,
+      "likes": 1526,
+      "comments": 6,
+      "shares": 70,
+      "saves": 103
+    },
+    "sristories.official": {
+      "views": 1100000,
+      "likes": 1231,
+      "comments": 6,
+      "shares": 77,
+      "saves": 88
+    }
+  },
+  "_tiktok_updated": "2026-09-03 06:05"
 }
