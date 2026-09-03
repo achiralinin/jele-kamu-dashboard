@@ -6,7 +6,9 @@
     "shares": 4,
     "comments": 1,
     "saves": 10,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
   "vdo_launching": {
     "url": "https://www.tiktok.com/@jelebeautieclub/video/7665552289360350471?_r=1&_t=ZS-98aaoHFAk9l",
@@ -15,7 +17,9 @@
     "shares": 5,
     "comments": 3,
     "saves": 19,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
   "vdo_intro": {
     "url": "https://www.tiktok.com/@jelebeautieclub/video/7665555878841568520?_r=1&_t=ZS-98aaqlDP2OK",
@@ -24,7 +28,9 @@
     "shares": 15,
     "comments": 3,
     "saves": 11,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
   "vdo_review": {
     "url": "https://www.tiktok.com/@jelebeautieclub/video/7665556301933497618?_r=1&_t=ZS-98aayKLVWVx",
@@ -33,7 +39,9 @@
     "shares": 18,
     "comments": 0,
     "saves": 11,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
   "chatangg": {
     "url": "https://www.tiktok.com/@chatangg/video/7669743894128495892?_r=1&_t=ZS-98ZVsp7X63w",
@@ -42,7 +50,9 @@
     "shares": 23,
     "comments": 8,
     "saves": 63,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
   "100lowteens": {
     "url": "https://www.tiktok.com/@100lowteens/video/7669650629907795208?_r=1&_t=ZS-98Z5kDZwIb3",
@@ -51,7 +61,9 @@
     "shares": 70,
     "comments": 6,
     "saves": 103,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
   "sristories.official": {
     "url": "https://www.tiktok.com/@sristories.official/video/7669643506603920660?_r=1&_t=ZS-98ZAgcrR0K4",
@@ -60,7 +72,9 @@
     "shares": 77,
     "comments": 6,
     "saves": 88,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
   "foodballstylee": {
     "url": "https://www.tiktok.com/@foodballstylee/video/7669677844703890706?_r=1&_t=ZS-98ZMk7kLhR7",
@@ -69,7 +83,12 @@
     "shares": 18,
     "comments": 4,
     "saves": 69,
-    "followers": 0
+    "followers": 0,
+    "ok": false,
+    "as_of": "2026-08-25 18:40"
   },
-  "_updated": "2026-09-03 00:59"
+  "_updated": "2026-08-25 18:40",
+  "_last_attempt": "2026-09-03 04:48",
+  "_fresh": 0,
+  "_total": 8
 }

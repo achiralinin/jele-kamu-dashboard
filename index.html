@@ -125,6 +125,14 @@ a.link:hover{border-bottom-color:var(--jele)}
 .fld .fname{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fld-head{color:var(--muted);font-size:.7rem;text-transform:uppercase;font-weight:700;position:sticky;top:0;background:#fff}
 .fld-head span:not(.fname){text-align:right}
+.fld5{display:grid;grid-template-columns:1fr 88px 68px 58px 62px 62px;gap:6px;align-items:center;margin-bottom:7px;font-size:.82rem}
+.fld5 input{padding:6px 6px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:.8rem;width:100%;text-align:right}
+.fld5 input:focus{outline:2px solid var(--jele);outline-offset:-1px}
+.fld5 .fname{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srcb{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:99px;font-size:.62rem;font-weight:700;vertical-align:middle}
+.srcb-manual{background:#e7f0ff;color:#1b4b8f;border:1px solid #b9d2f7}
+.srcb-stale{background:#fff4e5;color:#8a4b00;border:1px solid #ffd79a}
+.msec{margin:14px 0 6px;font-weight:800;font-size:.9rem}
 textarea#jsonOut{width:100%;height:140px;border:1px solid var(--line);border-radius:8px;padding:10px;font-family:ui-monospace,SFMono-Regular,monospace;font-size:.74rem;margin-top:12px}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;align-items:center}
 #copyMsg{font-size:.8rem;color:#0F7A44;font-weight:600;margin-right:auto}
@@ -162,7 +170,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
     <h2>KPI แยกตามกลุ่มงาน — Plan vs Actual</h2>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <span class="note">ช่อง Actual ว่าง = ยังไม่ได้กรอกผลจริง · ชิป % คือความสำเร็จเทียบเป้า</span>
-      <button class="btn btn-primary" onclick="openManual()">＋ กรอกยอด Facebook</button>
+      <button class="btn btn-primary" onclick="openManual()">＋ กรอกยอดเอง (FB + TikTok)</button>
     </div>
   </div>
   <div class="tbl-wrap tbl-scroll">
@@ -275,15 +283,18 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 <!-- ============ MANUAL FACEBOOK ENTRY ============ -->
 <div class="modal" id="manualModal">
   <div class="modal-box">
-    <h3>กรอกยอด Facebook / Reach</h3>
+    <h3>กรอกยอดเอง — Facebook + TikTok</h3>
     <p class="hint">
-      TikTok ดึงอัตโนมัติอยู่แล้ว ส่วนนี้สำหรับตัวเลขที่ดึงไม่ได้ — <b>Views / Reach / Engagement ฝั่ง Facebook</b>
-      (เอาจาก Meta Business Suite)<br>
       ช่องที่มีเลขอยู่แล้วคือค่าปัจจุบัน แก้ทับได้เลย · เว้นว่าง = ใช้ค่าเดิม<br>
+      <b>TikTok:</b> ถ้าระบบดึงอัตโนมัติสำเร็จ มันจะทับค่าที่กรอกมือให้เอง — ที่กรอกไว้จะถูกใช้เฉพาะตอนที่ดึงไม่ได้ (และถ้ายอดที่กรอกสูงกว่ายอดที่ดึงมา ระบบจะยึดตัวที่สูงกว่า เพราะยอดวิวไม่มีทางลดลง)<br>
       กรอกเสร็จกด <b>Copy JSON</b> → กด <b>เปิดไฟล์บน GitHub</b> → วางทับทั้งไฟล์ → Commit เป็นอันจบ
     </p>
+    <div class="msec">Facebook — จาก Meta Business Suite</div>
     <div class="fld fld-head"><span class="fname">ชิ้นงาน</span><span>FB Views</span><span>FB Reach</span><span>FB Eng.</span></div>
     <div id="manualFields"></div>
+    <div class="msec">TikTok — เปิดคลิปแล้วอ่านตัวเลขใต้คลิป</div>
+    <div class="fld5 fld-head"><span class="fname">คลิป</span><span>Views</span><span>Likes</span><span>Cmt.</span><span>Share</span><span>Save</span></div>
+    <div id="manualFieldsTT"></div>
     <textarea id="jsonOut" readonly placeholder="กด Copy JSON แล้ว JSON จะขึ้นตรงนี้ (คัดลอกให้อัตโนมัติ)"></textarea>
     <div class="modal-actions">
       <span id="copyMsg"></span>
@@ -378,6 +389,19 @@ function fbBase(i){
   return { r:pick(m.fb_reach, i._ar), v:pick(m.fb_views, i._av), e:pick(m.fb_eng, i._ae) };
 }
 
+function ageMinutes(stamp){
+  if(!stamp) return null;
+  const t = Date.parse(stamp.replace(' ','T')+'Z');
+  return isNaN(t) ? null : Math.max(0, Math.round((Date.now()-t)/60000));
+}
+function staleWarn(){
+  const m = ageMinutes(LIVE._updated);
+  if(m === null || m < 360) return '';
+  const attempt = LIVE._last_attempt ? ` (ระบบยังรันอยู่ ลองล่าสุด ${LIVE._last_attempt} UTC แต่ TikTok ไม่ยอมให้ดึง)` : '';
+  return `<div style="margin-top:6px;padding:8px 10px;border-radius:8px;background:#fff4e5;color:#8a4b00;border:1px solid #ffd79a;font-weight:600">`
+       + `ยอด TikTok ค้างอยู่ที่ค่าของ ${LIVE._updated} UTC — ดึงใหม่ไม่สำเร็จ${attempt} ตัวเลข TikTok ด้านล่างยังไม่ใช่ยอดปัจจุบัน`
+       + `</div>`;
+}
 function dataAge(stamp){
   if(!stamp) return '';
   const t = Date.parse(stamp.replace(' ','T')+'Z');
@@ -388,9 +412,27 @@ function dataAge(stamp){
   if(h < 24) return `ข้อมูลอายุ ${h} ชม. ${m%60} นาที`;
   return `ข้อมูลอายุ ${Math.floor(h/24)} วัน ${h%24} ชม.`;
 }
+/* เลือกแหล่งยอด TikTok ของแต่ละคลิป
+   ลำดับ: ดึงสดสำเร็จรอบนี้ > ที่กรอกมือ > ค่าเก่าที่ค้างอยู่
+   ถ้าดึงสดได้แต่ยอดต่ำกว่าที่กรอกมือ ให้ยึดตัวที่สูงกว่า (ยอดวิวไม่ลดลง) */
+function ttData(i){
+  if(!i.key) return null;
+  const live = LIVE[i.key] || null;
+  const man  = (MANUAL._tiktok || {})[i.key] || null;
+  const n = x => (x===undefined || x===null || x==='') ? null : Number(x);
+  const manViews = man ? n(man.views) : null;
+  if(live && live.ok){
+    if(manViews !== null && manViews > (live.views||0))
+      return Object.assign({}, live, man, {src:'manual'});
+    return Object.assign({}, live, {src:'auto'});
+  }
+  if(manViews !== null) return Object.assign({}, live||{}, man, {src:'manual'});
+  return live ? Object.assign({}, live, {src:'stale'}) : null;
+}
+
 function applyLive(){
   GROUPS.forEach(g => g.items.forEach(i => {
-    const d = i.key ? LIVE[i.key] : null;
+    const d = i.key ? ttData(i) : null;
     const fb = fbBase(i);
     i.live = d || null;
     i.ar = fb.r;                                  // Reach = Facebook เท่านั้น (TikTok ไม่เปิดให้ดึง)
@@ -581,7 +623,9 @@ document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
   const eng = (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
   const er  = d.views ? (eng/d.views*100).toFixed(2)+'%' : '–';
   const cpv = d.views ? ((i.fee||0)+i.b)/d.views : null;
-  return `<tr><td style="font-weight:600">${i.n}<span class="meta-line">${i.f?i.f+' followers':'คลิปแบรนด์'}</span></td>
+  const sb = d.src==='manual' ? '<span class="srcb srcb-manual">กรอกเอง</span>'
+           : d.src==='stale'  ? `<span class="srcb srcb-stale">ค้าง ${d.as_of||''}</span>` : '';
+  return `<tr><td style="font-weight:600">${i.n}${sb}<span class="meta-line">${i.f?i.f+' followers':'คลิปแบรนด์'}</span></td>
     <td class="num" style="font-weight:700">${fmt(d.views||0)}</td>
     <td class="num">${fmt(d.likes||0)}</td><td class="num">${fmt(d.comments||0)}</td>
     <td class="num">${fmt(d.shares||0)}</td><td class="num">${fmt(d.saves||0)}</td>
@@ -600,7 +644,7 @@ document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
     <td class="num">${s('views')?(eng/s('views')*100).toFixed(2)+'%':'–'}</td><td></td><td></td></tr>`;
 })();
 document.getElementById('liveStamp').innerHTML = LIVE._updated
-  ? `ดึงล่าสุด ${LIVE._updated} (UTC) · ${dataAge(LIVE._updated)} · CPV = (ค่าตัว + media) ÷ views`
+  ? `ดึงล่าสุด ${LIVE._updated} (UTC) · ${dataAge(LIVE._updated)} · CPV = (ค่าตัว + media) ÷ views${staleWarn()}`
   : `ยังไม่มีข้อมูล — รอ GitHub Actions รันรอบแรก · CPV = (ค่าตัว + media) ÷ views`;
 
 // -- posts
@@ -666,6 +710,27 @@ function openManual(){
     });
   });
   document.getElementById('manualFields').innerHTML = html;
+
+  // ---- TikTok ----
+  const TT = ['views','likes','comments','shares','saves'];
+  const ttMan = MANUAL._tiktok || {};
+  let ttHtml = '';
+  GROUPS.forEach(g=>{
+    const rows = g.items.filter(i=>i.key);
+    if(!rows.length) return;
+    ttHtml += `<div class="mgrp">${g.name}</div>`;
+    rows.forEach(i=>{
+      const m = ttMan[i.key] || {};
+      const cur = LIVE[i.key] || {};
+      const seed = f => (m[f]!==undefined && m[f]!==null && m[f]!=='') ? m[f]
+                      : (cur[f]!==undefined && cur[f]!==null ? cur[f] : '');
+      ttHtml += `<div class="fld5"><span class="fname" title="${i.n}">${i.n}</span>`
+             + TT.map(f=>`<input type="number" min="0" data-tt="${i.key}" data-f="${f}" value="${seed(f)}" placeholder="${f}">`).join('')
+             + `</div>`;
+    });
+  });
+  document.getElementById('manualFieldsTT').innerHTML = ttHtml;
+
   document.getElementById('copyMsg').textContent = '';
   document.getElementById('jsonOut').value = '';
   document.getElementById('manualModal').classList.add('open');
@@ -678,6 +743,16 @@ function buildManualJson(){
     const v=Number(inp.value); if(!isFinite(v)) return;
     (out[inp.dataset.k] = out[inp.dataset.k] || {})[inp.dataset.f] = v;
   });
+  const tt={};
+  document.querySelectorAll('#manualFieldsTT input').forEach(inp=>{
+    if(inp.value==='') return;
+    const v=Number(inp.value); if(!isFinite(v)) return;
+    (tt[inp.dataset.tt] = tt[inp.dataset.tt] || {})[inp.dataset.f] = v;
+  });
+  if(Object.keys(tt).length){
+    out._tiktok = tt;
+    out._tiktok_updated = new Date().toISOString().slice(0,16).replace('T',' ');
+  }
   const txt=JSON.stringify(out,null,2);
   const ta=document.getElementById('jsonOut'); ta.value=txt;
   ta.select();
@@ -685,7 +760,8 @@ function buildManualJson(){
   try{ ok=document.execCommand('copy'); }catch(e){}
   if(!ok && navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>{},()=>{}); ok=true; }
   document.getElementById('copyMsg').textContent =
-    (ok?'✓ คัดลอกแล้ว':'คัดลอกเองจากกล่องด้านบน') + ` · ${Object.keys(out).length} ชิ้นงาน`;
+    (ok?'✓ คัดลอกแล้ว':'คัดลอกเองจากกล่องด้านบน')
+    + ` · FB ${Object.keys(out).filter(k=>!k.startsWith('_')).length} ชิ้น · TikTok ${Object.keys(out._tiktok||{}).length} คลิป`;
   // ให้เห็นผลทันทีบนหน้าจอ (ยังไม่ถาวรจนกว่าจะ commit ไฟล์)
   MANUAL = out; render();
 }

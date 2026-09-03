@@ -86,6 +86,8 @@ def main():
         pass
 
     results = {}
+    fresh = 0
+    now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
     active = {k: v for k, v in KOL_LINKS.items() if v and str(v).strip()}
 
     print(f"Scraping {len(active)} KOL(s) using yt-dlp...")
@@ -99,28 +101,44 @@ def main():
         print(f"  Scraping @{username}...")
         data = scrape_tiktok_video(link)
         if data:
+            data['ok'] = True          # ดึงสดสำเร็จรอบนี้
+            data['as_of'] = now
             results[username] = data
+            fresh += 1
             print(f"    Views: {data['views']:,} | Likes: {data['likes']:,} | "
                   f"Shares: {data['shares']:,} | Comments: {data['comments']:,} | "
                   f"Saves: {data['saves']:,}")
         else:
             old = previous.get(username)
             if isinstance(old, dict) and old.get('views'):
+                old = dict(old)
+                old['ok'] = False      # ค่าเก่า ไม่ใช่ยอดรอบนี้
+                old.setdefault('as_of', previous.get('_updated'))
                 results[username] = old
-                print("    Failed — เก็บค่ารอบก่อนไว้แทน")
+                print("    Failed — เก็บค่ารอบก่อนไว้แทน (ทำเครื่องหมายว่าค้าง)")
             else:
                 print(f"    Failed to scrape @{username}")
 
         time.sleep(random.uniform(0.5, 1.5))
 
-    results['_updated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
+    # _updated ต้องหมายถึง "ครั้งล่าสุดที่ดึงยอดได้จริง" เท่านั้น
+    # ถ้ารอบนี้ล้มทุกลิงก์ ให้คงเวลาเดิมไว้ ไม่งั้นแดชบอร์ดจะโกหกว่าข้อมูลสด
+    if fresh > 0:
+        results['_updated'] = now
+    else:
+        results['_updated'] = previous.get('_updated') or now
+    results['_last_attempt'] = now
+    results['_fresh'] = fresh
+    results['_total'] = len(active)
 
     with open(output_file, 'w') as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
 
-    ok = len([k for k in results if not k.startswith('_')])
     print(f"\nResults saved to {output_file}")
-    print(f"Successfully collected: {ok}/{len(active)}")
+    print(f"Freshly scraped: {fresh}/{len(active)}"
+          f"{'  <-- ALL FAILED, keeping previous values' if fresh == 0 else ''}")
+    if fresh == 0:
+        print("WARNING: TikTok returned no data this run. Numbers on the dashboard are stale.")
 
 
 if __name__ == '__main__':
