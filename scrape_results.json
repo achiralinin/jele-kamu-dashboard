@@ -7,7 +7,7 @@
     "comments": 1,
     "saves": 10,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "vdo_launching": {
@@ -18,7 +18,7 @@
     "comments": 3,
     "saves": 19,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "vdo_intro": {
@@ -29,7 +29,7 @@
     "comments": 3,
     "saves": 11,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "vdo_review": {
@@ -40,7 +40,7 @@
     "comments": 0,
     "saves": 11,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "chatangg": {
@@ -51,7 +51,7 @@
     "comments": 10,
     "saves": 67,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "100lowteens": {
@@ -62,7 +62,7 @@
     "comments": 6,
     "saves": 106,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "sristories.official": {
@@ -73,7 +73,7 @@
     "comments": 6,
     "saves": 87,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "foodballstylee": {
@@ -84,11 +84,11 @@
     "comments": 4,
     "saves": 79,
     "followers": 0,
-    "ok": true,
+    "ok": false,
     "as_of": "2026-09-10 06:36"
   },
   "_updated": "2026-09-10 06:36",
-  "_last_attempt": "2026-09-10 06:36",
-  "_fresh": 8,
+  "_last_attempt": "2026-09-10 11:47",
+  "_fresh": 0,
   "_total": 8
 }
