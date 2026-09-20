@@ -88,29 +88,56 @@
       "likes": 785,
       "comments": 4,
       "shares": 18,
-      "saves": 69
+      "saves": 69,
+      "reach": 378420
     },
     "chatangg": {
       "views": 970000,
       "likes": 551,
       "comments": 8,
       "shares": 23,
-      "saves": 63
+      "saves": 63,
+      "reach": 313220
     },
     "100lowteens": {
       "views": 950200,
       "likes": 1526,
       "comments": 6,
       "shares": 70,
-      "saves": 103
+      "saves": 103,
+      "reach": 303120
     },
     "sristories.official": {
       "views": 1100000,
       "likes": 1231,
       "comments": 6,
       "shares": 77,
-      "saves": 88
+      "saves": 88,
+      "reach": 368220
+    },
+    "sampling_1": {
+      "views": 193800,
+      "likes": 107,
+      "comments": 1,
+      "shares": 4,
+      "saves": 13
+    },
+    "sampling_2": {
+      "views": 106500,
+      "likes": 74,
+      "comments": 0,
+      "shares": 3,
+      "saves": 7
     }
   },
-  "_tiktok_updated": "2026-09-03 06:05"
+  "_tiktok_updated": "2026-09-04 10:02",
+  "sampling_1": {
+    "fb_views": 101057,
+    "fb_eng": 26
+  },
+  "sampling_2": {
+    "fb_views": 117837,
+    "fb_reach": 75900,
+    "fb_eng": 63
+  }
 }

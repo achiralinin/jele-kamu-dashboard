@@ -30,6 +30,11 @@ KOL_LINKS = {
     "vdo_launching": "https://vt.tiktok.com/ZS4PJ8yar/",
     "vdo_intro": "https://vt.tiktok.com/ZS4PJ1pox/",
     "vdo_review": "https://vt.tiktok.com/ZS4PJa3Sw/",
+    # --- VDO Sampling ---
+    "sampling_1": "https://vt.tiktok.com/ZSqd3T5Ft/",
+    "sampling_2": "https://vt.tiktok.com/ZSqdTNQ8W/",
+    "sampling_3": "https://vt.tiktok.com/ZSqcP4UhM/",
+    "sampling_4": "https://vt.tiktok.com/ZSqcP4Agg/",
     # --- KOL ---
     "chatangg": "https://vt.tiktok.com/ZS4yjnsWB/",
     "100lowteens": "https://vt.tiktok.com/ZS4U6vYTF/",

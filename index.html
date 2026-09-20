@@ -66,6 +66,9 @@ thead th.grp-h{text-align:center;border-left:1px solid var(--line);background:#E
 thead th.sub-h{font-size:.7rem;padding-top:7px;padding-bottom:7px;background:#F5F6F7}
 td.sep,th.sep{border-left:1px solid var(--line)}
 .pct{display:inline-block;margin-left:7px;padding:1px 7px;border-radius:999px;font-size:.7rem;font-weight:700;vertical-align:1px}
+.pct2{display:block;margin-top:3px;font-size:.62rem;font-weight:700;opacity:.9;white-space:nowrap}
+.pct2.p-hi{color:var(--ok)}.pct2.p-mid{color:var(--warn)}.pct2.p-low{color:var(--jele)}
+.adchip{display:inline-block;margin-left:7px;padding:1px 7px;border-radius:99px;font-size:.62rem;font-weight:700;background:#E9F2FF;color:#1B4B8F;border:1px solid #BBD4F8;vertical-align:middle}
 .p-hi{background:#E6F4EA;color:#0F7A44}
 .p-mid{background:#FDF3E2;color:#A96C13}
 .p-low{background:#FDECEC;color:#B3261E}
@@ -125,7 +128,7 @@ a.link:hover{border-bottom-color:var(--jele)}
 .fld .fname{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fld-head{color:var(--muted);font-size:.7rem;text-transform:uppercase;font-weight:700;position:sticky;top:0;background:#fff}
 .fld-head span:not(.fname){text-align:right}
-.fld5{display:grid;grid-template-columns:1fr 88px 68px 58px 62px 62px;gap:6px;align-items:center;margin-bottom:7px;font-size:.82rem}
+.fld5{display:grid;grid-template-columns:1fr 84px 84px 60px 54px 56px 56px;gap:5px;align-items:center;margin-bottom:7px;font-size:.82rem}
 .fld5 input{padding:6px 6px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:.8rem;width:100%;text-align:right}
 .fld5 input:focus{outline:2px solid var(--jele);outline-offset:-1px}
 .fld5 .fname{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -169,7 +172,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
   <div class="sec-head">
     <h2>KPI แยกตามกลุ่มงาน — Plan vs Actual</h2>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <span class="note">ช่อง Actual ว่าง = ยังไม่ได้กรอกผลจริง · ชิป % คือความสำเร็จเทียบเป้า</span>
+      <span class="note">ช่อง Actual ว่าง = ยังไม่ได้กรอกผลจริง · ชิป % คือเทียบเป้าเต็มทั้งกลุ่ม · บรรทัดเล็ก "% ของที่ลง" คือเทียบเป้าเฉพาะชิ้นที่ลงไปแล้ว</span>
       <button class="btn btn-primary" onclick="openManual()">＋ กรอกยอดเอง (FB + TikTok)</button>
     </div>
   </div>
@@ -293,7 +296,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
     <div class="fld fld-head"><span class="fname">ชิ้นงาน</span><span>FB Views</span><span>FB Reach</span><span>FB Eng.</span></div>
     <div id="manualFields"></div>
     <div class="msec">TikTok — เปิดคลิปแล้วอ่านตัวเลขใต้คลิป</div>
-    <div class="fld5 fld-head"><span class="fname">คลิป</span><span>Views</span><span>Likes</span><span>Cmt.</span><span>Share</span><span>Save</span></div>
+    <div class="fld5 fld-head"><span class="fname">คลิป</span><span>Views</span><span>Reach</span><span>Likes</span><span>Cmt.</span><span>Share</span><span>Save</span></div>
     <div id="manualFieldsTT"></div>
     <textarea id="jsonOut" readonly placeholder="กด Copy JSON แล้ว JSON จะขึ้นตรงนี้ (คัดลอกให้อัตโนมัติ)"></textarea>
     <div class="modal-actions">
@@ -334,10 +337,14 @@ const GROUPS = [
       fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', post:'https://vt.tiktok.com/ZS4PJa3Sw/' },
   ]},
   { name:'VDO Sampling', color:'#C97B3E', items:[
-    { n:'VDO Sampling Troop #1', mk:'sampling_1', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Sampling Troop #2', mk:'sampling_2', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Sampling Troop #3', mk:'sampling_3', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
-    { n:'VDO Sampling Troop #4', mk:'sampling_4', b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null },
+    { n:'VDO Sampling Troop #1', mk:'sampling_1', key:'sampling_1', ads:true, b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/1DGNsEfEFj/', post:'https://vt.tiktok.com/ZSqd3T5Ft/' },
+    { n:'VDO Sampling Troop #2', mk:'sampling_2', key:'sampling_2', ads:true, b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/1DWMPLQ9L5/', post:'https://vt.tiktok.com/ZSqdTNQ8W/' },
+    { n:'VDO Sampling Troop #3', mk:'sampling_3', key:'sampling_3', ads:true, b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/18WAsPTD65/', post:'https://vt.tiktok.com/ZSqcP4UhM/' },
+    { n:'VDO Sampling Troop #4', mk:'sampling_4', key:'sampling_4', ads:true, b:4125, r:40000, v:120000, e:0, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/r/1QTXBrHZ1Z/', post:'https://vt.tiktok.com/ZSqcP4Agg/' },
   ]},
   { name:'AWO Content', color:'#E8829F', items:[
     { n:'Photo AWO #1', mk:'awo_1',       b:2000, r:60000, v:180000, e:267, ar:85068, av:120508, ae:593,
@@ -346,9 +353,12 @@ const GROUPS = [
       fb:'https://www.facebook.com/share/p/1GYyv9o34T/' },
     { n:'Photo album AWO #3', mk:'awo_3', b:2000, r:60000, v:180000, e:267, ar:51824, av:75749, ae:481,
       fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
-    { n:'Photo AWO #4', mk:'awo_4',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo AWO #5', mk:'awo_5',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
-    { n:'Photo AWO #6', mk:'awo_6',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
+    { n:'Photo AWO #4', mk:'awo_4',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/p/1bCT4ypU49/' },
+    { n:'Photo AWO #5', mk:'awo_5',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/p/1DdW8H9z94/' },
+    { n:'Photo AWO #6', mk:'awo_6',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null,
+      fb:'https://www.facebook.com/share/p/1CRMpG7kpt/' },
     { n:'Photo AWO #7', mk:'awo_7',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
     { n:'Photo AWO #8', mk:'awo_8',       b:2000, r:60000, v:180000, e:267, ar:null, av:null, ae:null },
   ]},
@@ -435,12 +445,13 @@ function applyLive(){
     const d = i.key ? ttData(i) : null;
     const fb = fbBase(i);
     i.live = d || null;
-    i.ar = fb.r;                                  // Reach = Facebook เท่านั้น (TikTok ไม่เปิดให้ดึง)
+    i.ar = fb.r;                                  // Reach ฐาน = Facebook
     i.av = fb.v;
     i.ae = fb.e;
     if(d){                                        // มีคลิป TikTok → บวกทับฐาน Facebook
       i.av = (fb.v||0) + (d.views||0);
       i.ae = (fb.e||0) + (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
+      if(d.reach) i.ar = (fb.r||0) + Number(d.reach);  // TikTok reach กรอกมือจาก TikTok Studio
     }
   }));
 }
@@ -461,15 +472,15 @@ const POSTS = [
     fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
   { n:'VDO Review',            ch:'FB+TT', by:'Brand', date:'2026-08-02', st:'live',
     fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', tt:'https://vt.tiktok.com/ZS4PJa3Sw/' },
-  { n:'Photo AWO activity #4', ch:'FB',    by:'Brand',              date:'2026-08-05', st:'wait' },
-  { n:'Photo AWO เจเล่แก้มป่อง #5', ch:'FB', by:'Brand',            date:'2026-08-12', st:'wait' },
-  { n:'Photo AWO #6',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
+  { n:'Photo AWO activity #4', ch:'FB', by:'Brand', date:'2026-08-04', st:'live', fb:'https://www.facebook.com/share/p/1bCT4ypU49/' },
+  { n:'Photo AWO เจเล่แก้มป่อง #5', ch:'FB', by:'Brand', date:'2026-08-11', st:'live', fb:'https://www.facebook.com/share/p/1DdW8H9z94/' },
+  { n:'Photo AWO #6 ทีมไหน?', ch:'FB', by:'Brand', date:'2026-09-16', st:'live', fb:'https://www.facebook.com/share/p/1CRMpG7kpt/' },
   { n:'Photo AWO #7',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
   { n:'Photo AWO #8',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
-  { n:'VDO Sampling Troop #1', ch:'FB+TT', by:'Brand',              date:'2026-08-11', st:'wait' },
-  { n:'VDO Sampling Troop #2', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait' },
-  { n:'VDO Sampling Troop #3', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait' },
-  { n:'VDO Sampling Troop #4', ch:'FB+TT', by:'Brand',              date:'-',          st:'wait' },
+  { n:'VDO Sampling Troop #1', ch:'FB+TT', by:'Brand', date:'2026-08-25', st:'live', fb:'https://www.facebook.com/share/r/1DGNsEfEFj/', tt:'https://vt.tiktok.com/ZSqd3T5Ft/' },
+  { n:'VDO Sampling Troop #2', ch:'FB+TT', by:'Brand', date:'2026-08-27', st:'live', fb:'https://www.facebook.com/share/r/1DWMPLQ9L5/', tt:'https://vt.tiktok.com/ZSqdTNQ8W/' },
+  { n:'VDO Sampling Troop #3', ch:'FB+TT', by:'Brand', date:'-', st:'live', fb:'https://www.facebook.com/share/r/18WAsPTD65/', tt:'https://vt.tiktok.com/ZSqcP4UhM/' },
+  { n:'VDO Sampling Troop #4', ch:'FB+TT', by:'Brand', date:'-', st:'live', fb:'https://www.facebook.com/share/r/1QTXBrHZ1Z/', tt:'https://vt.tiktok.com/ZSqcP4Agg/' },
   { n:'KOL Post — chatangg',            ch:'TT', by:'chatangg',            date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4yjnsWB/' },
   { n:'KOL Post — 100lowteens',         ch:'TT', by:'100lowteens',         date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4U6vYTF/' },
   { n:'KOL Post — sristories.official', ch:'TT', by:'sristories.official', date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4UfB9Gu/' },
@@ -507,6 +518,8 @@ const short = n => n>=1e6 ? (n/1e6).toFixed(n%1e6?1:0)+'M'
 
 // รวมค่าจริงแบบข้าม null (ถ้าไม่มีสักชิ้น = null)
 const asum = (a,k) => { const v=a.filter(x=>x[k]!=null); return v.length? v.reduce((s,x)=>s+x[k],0) : null; };
+// เป้าเฉพาะชิ้นที่มีผลจริงของตัวชี้วัดนั้นแล้ว
+const dsum = (a,planKey,actKey) => a.filter(x=>x[actKey]!=null).reduce((s,x)=>s+(x[planKey]||0),0);
 const done  = (a,k) => a.filter(x=>x[k]!=null).length;
 
 function render(){
@@ -516,12 +529,14 @@ const totals = GROUPS.map(g => ({
   name:g.name, color:g.color, count:g.items.length, items:g.items,
   b:sum(g.items,'b'), r:sum(g.items,'r'), v:sum(g.items,'v'), e:sum(g.items,'e'),
   ar:asum(g.items,'ar'), av:asum(g.items,'av'), ae:asum(g.items,'ae'),
+  rD:dsum(g.items,'r','ar'), vD:dsum(g.items,'v','av'), eD:dsum(g.items,'e','ae'),
   fee:sum(g.items.map(i=>({fee:i.fee||0})),'fee')
 }));
 const ALL = {
   count:sum(totals,'count'),
   b:sum(totals,'b'), r:sum(totals,'r'), v:sum(totals,'v'), e:sum(totals,'e'),
   ar:asum(totals,'ar'), av:asum(totals,'av'), ae:asum(totals,'ae'),
+  rD:sum(totals,'rD'), vD:sum(totals,'vD'), eD:sum(totals,'eD'),
   fee:sum(totals,'fee')
 };
 const ALL_ITEMS = GROUPS.flatMap(g=>g.items);
@@ -533,10 +548,16 @@ function pctChip(act, plan){
   const cls = p>=100 ? 'p-hi' : p>=70 ? 'p-mid' : 'p-low';
   return `<span class="pct ${cls}">${p}%</span>`;
 }
-function actCell(act, plan, sep){
+function actCell(act, plan, sep, planDone){
   const c = sep ? ' sep' : '';
-  if(act!=null) return `<td class="num${c}">${fmt(act)}${pctChip(act,plan)}</td>`;
-  return `<td class="num${c}"><span class="dash">${plan?'รอผล':'–'}</span></td>`;
+  if(act==null) return `<td class="num${c}"><span class="dash">${plan?'รอผล':'–'}</span></td>`;
+  let extra = '';
+  if(planDone && plan && planDone !== plan){
+    const p2 = Math.round(act/planDone*100);
+    const k2 = p2>=100 ? 'p-hi' : p2>=70 ? 'p-mid' : 'p-low';
+    extra = `<span class="pct2 ${k2}">${p2}% ของที่ลง</span>`;
+  }
+  return `<td class="num${c}">${fmt(act)}${pctChip(act,plan)}${extra}</td>`;
 }
 
 // -- hero cards
@@ -574,16 +595,16 @@ gt.innerHTML = totals.map(g=>{
   const head = `<tr class="grp">
     <td><span class="dot" style="background:${g.color}"></span>${g.name}</td>
     <td class="num">${g.count}</td><td class="num">${fmt(g.b)}</td>
-    <td class="num sep">${fmt(g.r)}</td>${actCell(g.ar,g.r)}
-    <td class="num sep">${fmt(g.v)}</td>${actCell(g.av,g.v)}
-    <td class="num sep">${g.e?fmt(g.e):'<span class="dash">–</span>'}</td>${actCell(g.ae,g.e)}
+    <td class="num sep">${fmt(g.r)}</td>${actCell(g.ar,g.r,false,g.rD)}
+    <td class="num sep">${fmt(g.v)}</td>${actCell(g.av,g.v,false,g.vD)}
+    <td class="num sep">${g.e?fmt(g.e):'<span class="dash">–</span>'}</td>${actCell(g.ae,g.e,false,g.eD)}
   </tr>`;
   const rows = g.items.map(i=>{
     const meta = i.f ? `<span class="meta-line">${i.f} followers · ค่าตัว ${fmt(i.fee)}฿${i.free?' · Free asset':''}
       · <a href="${i.url}" target="_blank" rel="noopener">โปรไฟล์</a>
       ${i.post?`· <a href="${i.post}" target="_blank" rel="noopener">โพสต์</a>`:''}</span>` : '';
     return `<tr>
-      <td style="padding-left:34px"><span style="color:var(--muted)">${i.n}</span>${meta}</td>
+      <td style="padding-left:34px"><span style="color:var(--muted)">${i.n}</span>${i.ads?'<span class="adchip">ยังรันแอดอยู่</span>':''}${meta}</td>
       <td class="num"></td><td class="num">${fmt(i.b)}</td>
       <td class="num sep">${fmt(i.r)}</td>${actCell(i.ar,i.r)}
       <td class="num sep">${fmt(i.v)}</td>${actCell(i.av,i.v)}
@@ -712,7 +733,7 @@ function openManual(){
   document.getElementById('manualFields').innerHTML = html;
 
   // ---- TikTok ----
-  const TT = ['views','likes','comments','shares','saves'];
+  const TT = ['views','reach','likes','comments','shares','saves'];
   const ttMan = MANUAL._tiktok || {};
   let ttHtml = '';
   GROUPS.forEach(g=>{
