@@ -133,11 +133,24 @@
   "_tiktok_updated": "2026-09-04 10:02",
   "sampling_1": {
     "fb_views": 101057,
-    "fb_eng": 26
+    "fb_eng": 26,
+    "fb_reach": 78986
   },
   "sampling_2": {
     "fb_views": 117837,
     "fb_reach": 75900,
     "fb_eng": 63
+  },
+  "sampling_3": {
+    "fb_views": 235800,
+    "fb_reach": 74790
+  },
+  "sampling_4": {
+    "fb_views": 27500,
+    "fb_reach": 9800
+  },
+  "awo_6": {
+    "fb_views": 60253,
+    "fb_reach": 36735
   }
 }
