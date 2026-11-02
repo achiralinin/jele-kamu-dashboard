@@ -42,6 +42,33 @@ KOL_LINKS = {
     "foodballstylee": "https://vt.tiktok.com/ZS4U7ftpy/",
 }
 
+# ============================================================
+#  เฟส 2 ขึ้นไป — เก็บลิงก์ไว้ใน tiktok_links.json แทนการแก้ไฟล์นี้
+#  คีย์ที่ปล่อยว่าง ("") จะถูกข้ามไปเอง
+# ============================================================
+EXTRA_LINKS_FILE = 'tiktok_links.json'
+
+
+def load_links():
+    links = dict(KOL_LINKS)
+    try:
+        with open(EXTRA_LINKS_FILE, encoding='utf-8') as f:
+            extra = json.load(f)
+    except FileNotFoundError:
+        return links
+    except Exception as e:
+        print(f"WARNING: อ่าน {EXTRA_LINKS_FILE} ไม่ได้ ({e}) — ใช้เฉพาะลิงก์ในไฟล์ Python")
+        return links
+    added = 0
+    for k, v in extra.items():
+        if k.startswith('_'):
+            continue
+        if v and str(v).strip():
+            links[k] = str(v).strip()
+            added += 1
+    print(f"Loaded {added} link(s) from {EXTRA_LINKS_FILE}")
+    return links
+
 
 def scrape_tiktok_video(url, timeout=25):
     """ดึง metadata ของคลิป TikTok ด้วย yt-dlp --dump-json"""
@@ -93,7 +120,7 @@ def main():
     results = {}
     fresh = 0
     now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
-    active = {k: v for k, v in KOL_LINKS.items() if v and str(v).strip()}
+    active = {k: v for k, v in load_links().items() if v and str(v).strip()}
 
     print(f"Scraping {len(active)} KOL(s) using yt-dlp...")
 

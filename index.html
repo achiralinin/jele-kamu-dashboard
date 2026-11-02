@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JELE CHEWY × KAMU KAMU — Campaign Dashboard</title>
+<title>JELE CHEWY × KAMU KAMU — Campaign Dashboard (เฟส 1 + 2)</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -31,6 +31,12 @@ header h1{font-size:2rem;font-weight:700;line-height:1.25;margin:6px 0 4px}
 header .sub{opacity:.85;font-size:.95rem}
 .hmeta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 14px;font-size:.82rem;font-weight:500}
+.phtabs{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.phtab{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:10px;padding:8px 16px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;transition:.15s;line-height:1.3}
+.phtab small{display:block;font-weight:400;font-size:.74rem;opacity:.75}
+.phtab:hover{background:rgba(255,255,255,.22)}
+.phtab.on{background:#fff;color:var(--jele);border-color:#fff}
+.phtab.on small{opacity:.65}
 
 /* ---------- section ---------- */
 section{margin-bottom:34px}
@@ -148,14 +154,9 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 <header>
   <div class="eyebrow">SNNP · Campaign Dashboard</div>
   <h1>JELE CHEWY × KAMU KAMU</h1>
-  <div class="sub">เยลลี่ชาผลไม้ — Camellia Tea &amp; Assam Tea · แคมเปญ Launching + Sampling + Always-On</div>
-  <div class="hmeta">
-    <span class="chip">ช่วงแคมเปญ 20 ก.ค. – 12 ส.ค. 2026</span>
-    <span class="chip">Facebook + TikTok</span>
-    <span class="chip">KOL / Page 6 ราย</span>
-    <span class="chip">ชิ้นงาน 22 ชิ้น</span>
-    <span class="chip" id="updated"></span>
-  </div>
+  <div class="sub" id="hSub"></div>
+  <div class="phtabs" id="phTabs"></div>
+  <div class="hmeta" id="hMeta"></div>
 </header>
 
 <!-- ============ HERO KPI ============ -->
@@ -259,7 +260,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 <section>
   <div class="sec-head">
     <h2>ไทม์ไลน์ Boost Ads</h2>
-    <div class="note">20 ก.ค. – 12 ส.ค. 2026 · เส้นแดงคือวันนี้</div>
+    <div class="note" id="gNote"></div>
   </div>
   <div class="gantt">
     <div class="g-grid">
@@ -272,14 +273,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
       </div>
       <div id="gRows"></div>
     </div>
-    <div class="legend">
-      <span><i class="sw" style="background:#C8102E"></i> VDO Launching</span>
-      <span><i class="sw" style="background:#E8829F"></i> AWO Content</span>
-      <span><i class="sw" style="background:#C97B3E"></i> VDO Sampling</span>
-      <span><i class="sw" style="background:#1877F2"></i> Facebook Page</span>
-      <span><i class="sw" style="background:#2A6E5E"></i> TikTok KOLs</span>
-      <span><i class="sw" style="background:#9AA0A6"></i> LAL Retargeting</span>
-    </div>
+    <div class="legend" id="gLegend"></div>
   </div>
 </section>
 
@@ -309,7 +303,7 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
 </div>
 
 <footer>
-  <span>ที่มาข้อมูล: Client_Sheet_JELE CHEWY X KAMU KAMU — June2026.xlsx (ชีต KPI · Working · KOL List · Timeline)</span>
+  <span id="srcNote"></span>
   <span>จัดทำโดย ลินิน</span>
 </footer>
 
@@ -325,7 +319,16 @@ footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-si
    แถวไหนมี key = มีคลิป TikTok ระบบจะบวกยอด TikTok ทับให้อัตโนมัติทุกรอบที่ Actions รัน
    ยอดรวมรายกลุ่ม + การ์ดบนสุด + % ความสำเร็จ คำนวณต่อให้เองทั้งหมด            */
 
-const GROUPS = [
+const PHASES = {
+  p1: {
+    label:'เฟส 1', when:'ก.ค. – ส.ค. 2026',
+    sub:'เยลลี่ชาผลไม้ — Camellia Tea &amp; Assam Tea · Launching + Sampling + Always-On',
+    chips:['ช่วงแคมเปญ 20 ก.ค. – 12 ส.ค. 2026','Facebook + TikTok','KOL / Page 6 ราย','ชิ้นงาน 22 ชิ้น'],
+    gNote:'20 ก.ค. – 12 ส.ค. 2026 · เส้นแดงคือวันนี้',
+    src:'Client_Sheet_JELE CHEWY X KAMU KAMU — June 2026.xlsx (ชีต KPI · Working · KOL List · Timeline)',
+    legend:[['#C8102E','VDO Launching'],['#E8829F','AWO Content'],['#C97B3E','VDO Sampling'],['#1877F2','Facebook Page'],['#2A6E5E','TikTok KOLs'],['#9AA0A6','LAL Retargeting']],
+    gStart:[2026,6,20], gDays:38,
+    groups: [
   { name:'VDO Launching', color:'#C8102E', items:[
     { n:'VDO Teaser (FB 1,000 / TT 1,175)',      mk:'vdo_teaser', key:'vdo_teaser',    b:2775, r:30000,  v:90000,  e:0, ar:91692, av:123748, ae:64,
       fb:'https://www.facebook.com/share/r/1C38MZaxaV/', post:'https://vt.tiktok.com/ZS4PJLMF4/' },
@@ -378,7 +381,83 @@ const GROUPS = [
     { n:'sristories.official', key:'sristories.official', b:10000, r:300000, v:900000, e:0, ar:null, av:null, ae:null,
       f:'81.7K',  fee:17000, url:'https://www.tiktok.com/@sristories.official', post:'https://vt.tiktok.com/ZS4UfB9Gu/' },
   ]},
-];
+],
+    posts: [
+  { n:'VDO Teaser',            ch:'FB+TT', by:'Brand', date:'2026-07-21', st:'live',
+    fb:'https://www.facebook.com/share/r/1C38MZaxaV/', tt:'https://vt.tiktok.com/ZS4PJLMF4/' },
+  { n:'VDO Launching',         ch:'FB+TT', by:'Brand', date:'2026-07-24', st:'live',
+    fb:'https://www.facebook.com/share/r/1CssNYcVmV/', tt:'https://vt.tiktok.com/ZS4PJ8yar/' },
+  { n:'VDO Introduction',      ch:'FB+TT', by:'Brand', date:'2026-07-25', st:'live',
+    fb:'https://www.facebook.com/share/r/1G6nJYeKyf/', tt:'https://vt.tiktok.com/ZS4PJ1pox/' },
+  { n:'Photo AWO #1',          ch:'FB',    by:'Brand', date:'2026-07-28', st:'live',
+    fb:'https://www.facebook.com/share/p/1ET1Gh2W4j/' },
+  { n:'Photo AWO #2',          ch:'FB',    by:'Brand', date:'2026-07-29', st:'live',
+    fb:'https://www.facebook.com/share/p/1GYyv9o34T/' },
+  { n:'Photo album AWO #3',    ch:'FB',    by:'Brand', date:'2026-07-31', st:'live',
+    fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
+  { n:'VDO Review',            ch:'FB+TT', by:'Brand', date:'2026-08-02', st:'live',
+    fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', tt:'https://vt.tiktok.com/ZS4PJa3Sw/' },
+  { n:'Photo AWO activity #4', ch:'FB', by:'Brand', date:'2026-08-04', st:'live', fb:'https://www.facebook.com/share/p/1bCT4ypU49/' },
+  { n:'Photo AWO เจเล่แก้มป่อง #5', ch:'FB', by:'Brand', date:'2026-08-11', st:'live', fb:'https://www.facebook.com/share/p/1DdW8H9z94/' },
+  { n:'Photo AWO #6 ทีมไหน?', ch:'FB', by:'Brand', date:'2026-09-16', st:'live', fb:'https://www.facebook.com/share/p/1CRMpG7kpt/' },
+  { n:'Photo AWO #7',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
+  { n:'Photo AWO #8',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
+  { n:'VDO Sampling Troop #1', ch:'FB+TT', by:'Brand', date:'2026-08-25', st:'live', fb:'https://www.facebook.com/share/r/1DGNsEfEFj/', tt:'https://vt.tiktok.com/ZSqd3T5Ft/' },
+  { n:'VDO Sampling Troop #2', ch:'FB+TT', by:'Brand', date:'2026-08-27', st:'live', fb:'https://www.facebook.com/share/r/1DWMPLQ9L5/', tt:'https://vt.tiktok.com/ZSqdTNQ8W/' },
+  { n:'VDO Sampling Troop #3', ch:'FB+TT', by:'Brand', date:'-', st:'live', fb:'https://www.facebook.com/share/r/18WAsPTD65/', tt:'https://vt.tiktok.com/ZSqcP4UhM/' },
+  { n:'VDO Sampling Troop #4', ch:'FB+TT', by:'Brand', date:'-', st:'live', fb:'https://www.facebook.com/share/r/1QTXBrHZ1Z/', tt:'https://vt.tiktok.com/ZSqcP4Agg/' },
+  { n:'KOL Post — chatangg',            ch:'TT', by:'chatangg',            date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4yjnsWB/' },
+  { n:'KOL Post — 100lowteens',         ch:'TT', by:'100lowteens',         date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4U6vYTF/' },
+  { n:'KOL Post — sristories.official', ch:'TT', by:'sristories.official', date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4UfB9Gu/' },
+  { n:'KOL Post — foodballstylee',      ch:'TT', by:'foodballstylee',      date:'2026-08-03', st:'review', tt:'https://vt.tiktok.com/ZS4U7ftpy/' },
+  { n:'Page Post — ชี้เป้าเซเว่น',      ch:'FB', by:'ชี้เป้าเซเว่น',       date:'2026-07-23', st:'live',   fb:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
+  { n:'Page Post — ผู้บริโภค',          ch:'FB', by:'ผู้บริโภค',           date:'2026-08-01', st:'live',   fb:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
+],
+    timeline: [
+  { n:'VDO Teaser',                  s:1,  d:3,  c:'#C8102E', t:'Boost 3 วัน' },
+  { n:'VDO Launching',               s:4,  d:7,  c:'#C8102E', t:'Boost 7 วัน' },
+  { n:'VDO Introduction',            s:5,  d:14, c:'#C8102E', t:'Boost 14 วัน' },
+  { n:'VDO Review',                  s:13, d:14, c:'#C8102E', t:'Boost 14 วัน' },
+  { n:'Photo AWO #1',                s:8,  d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo AWO #2',                s:9,  d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo album AWO #3',          s:11, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo AWO activity #4',       s:16, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'Photo AWO เจเล่แก้มป่อง #5',   s:23, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
+  { n:'VDO Sampling Troop #1',       s:22, d:14, c:'#C97B3E', t:'Boost 14 วัน' },
+  { n:'ชี้เป้าเซเว่น (FB Page)',      s:4,  d:15, c:'#1877F2', t:'Boost 15 วัน' },
+  { n:'ชี้เป้าเซเว่น — LAL',          s:18, d:15, c:'#9AA0A6', t:'LAL 15 วัน' },
+  { n:'ผู้บริโภค (FB Page)',          s:13, d:15, c:'#1877F2', t:'Boost 15 วัน' },
+  { n:'KOLs TikTok ×4',              s:15, d:7,  c:'#2A6E5E', t:'Boost 7 วัน' },
+  { n:'KOLs TikTok ×4 — LAL',        s:23, d:15, c:'#9AA0A6', t:'LAL 15 วัน' },
+]
+  },
+  p2: {
+    label:'เฟส 2', when:'ต.ค. – ธ.ค. 2026',
+    sub:'รอบเติมของที่ 7-Eleven · VDO 10 + AWO 5 + เพจ FB 3 + KOC TikTok 30 คน (2 Wave)',
+    chips:['ช่วงแคมเปญ 29 ต.ค. – 31 ธ.ค. 2026','Facebook + TikTok','KOL 30 ราย / เพจ 3 ราย','ชิ้นงาน 48 ชิ้น'],
+    gNote:'29 ต.ค. – 31 ธ.ค. 2026 · เส้นแดงคือวันนี้',
+    src:'Client_Sheet_JELE CHEWY X KAMU KAMU — Oct 2026 (ชีต KPI · Working · KOLs selected · Jele x Kamu Timeline)',
+    legend:[['#C8102E','VDO Content'],['#E8829F','AWO Content'],['#1877F2','Facebook Page'],['#2A6E5E','KOC Wave 1'],['#4E8F7E','KOC Wave 2']],
+    gStart:[2026,9,29], gDays:64,
+    groups: [{"name":"VDO Content (10 ชิ้น)","color":"#C8102E","items":[{"n":"VDO #1 (FB 1,000 / TT 2,000)","mk":"p2_vdo_1","key":"p2_vdo_1","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #2 (FB 1,000 / TT 2,000)","mk":"p2_vdo_2","key":"p2_vdo_2","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #3 (FB 1,000 / TT 2,000)","mk":"p2_vdo_3","key":"p2_vdo_3","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #4 (FB 1,000 / TT 2,000)","mk":"p2_vdo_4","key":"p2_vdo_4","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #5 (FB 1,000 / TT 2,000)","mk":"p2_vdo_5","key":"p2_vdo_5","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #6 (FB 1,000 / TT 2,000)","mk":"p2_vdo_6","key":"p2_vdo_6","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #7 (FB 1,000 / TT 2,000)","mk":"p2_vdo_7","key":"p2_vdo_7","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #8 (FB 1,000 / TT 2,000)","mk":"p2_vdo_8","key":"p2_vdo_8","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #9 (FB 1,000 / TT 2,000)","mk":"p2_vdo_9","key":"p2_vdo_9","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null},{"n":"VDO #10 (FB 1,000 / TT 2,000)","mk":"p2_vdo_10","key":"p2_vdo_10","b":3000,"r":30000,"v":90000,"e":0,"ar":null,"av":null,"ae":null}]},{"name":"AWO Content (5 ชิ้น)","color":"#E8829F","items":[{"n":"Photo AWO #1","mk":"p2_awo_1","b":2000,"r":60000,"v":180000,"e":200,"ar":null,"av":null,"ae":null},{"n":"Photo AWO #2","mk":"p2_awo_2","b":2000,"r":60000,"v":180000,"e":200,"ar":null,"av":null,"ae":null},{"n":"Photo AWO #3","mk":"p2_awo_3","b":2000,"r":60000,"v":180000,"e":200,"ar":null,"av":null,"ae":null},{"n":"Photo AWO #4","mk":"p2_awo_4","b":2000,"r":60000,"v":180000,"e":200,"ar":null,"av":null,"ae":null},{"n":"Photo PRO #5","mk":"p2_pro_5","b":2000,"r":60000,"v":180000,"e":200,"ar":null,"av":null,"ae":null}]},{"name":"Facebook Page (3 เพจ)","color":"#1877F2","items":[{"n":"ผู้บริโภค","mk":"p2_page_consumer","b":16000,"r":450000,"v":1500000,"e":1500,"ar":null,"av":null,"ae":null,"f":"2.9M","fee":47000,"url":"https://www.facebook.com/share/1DsufYaNye/"},{"n":"ป้ายยาเซเว่น","mk":"p2_page_paiya","b":16000,"r":450000,"v":1500000,"e":1500,"ar":null,"av":null,"ae":null,"f":"315K","fee":23000,"url":"https://www.facebook.com/share/19bkv3K31J/"},{"n":"ชี้เป้าเซเว่น","mk":"p2_page_cheepao","b":16000,"r":450000,"v":1500000,"e":1500,"ar":null,"av":null,"ae":null,"f":"1.2M","fee":38000,"url":"https://www.facebook.com/cheepaoseven"}]},{"name":"TikTok KOLs — Wave 1 (16 คน)","color":"#2A6E5E","items":[{"n":"justanothersunday","mk":"p2_justanothersunday","key":"p2_justanothersunday","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"21.1K","fee":8000,"url":"https://www.tiktok.com/@justanothersunday"},{"n":"oilaraoil","mk":"p2_oilaraoil","key":"p2_oilaraoil","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"14K","fee":9000,"url":"https://www.tiktok.com/@oilaraoil"},{"n":"todaymydae","mk":"p2_todaymydae","key":"p2_todaymydae","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"14.3K","fee":7000,"url":"https://www.tiktok.com/@todaymydae"},{"n":"proyyyp","mk":"p2_proyyyp","key":"p2_proyyyp","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"48.8K","fee":7500,"url":"https://www.tiktok.com/@proyyyp"},{"n":"boobaiiyook","mk":"p2_boobaiiyook","key":"p2_boobaiiyook","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"22.8K","fee":5000,"url":"https://www.tiktok.com/@boobaiiyook"},{"n":"littlebabietarn","mk":"p2_littlebabietarn","key":"p2_littlebabietarn","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"18.5K","fee":7000,"url":"https://www.tiktok.com/@littlebabietarn"},{"n":"ffonnn23","mk":"p2_ffonnn23","key":"p2_ffonnn23","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"26K","fee":6750,"url":"https://www.tiktok.com/@ffonnn23"},{"n":"jitranuchdang","mk":"p2_jitranuchdang","key":"p2_jitranuchdang","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"37.3K","fee":12500,"url":"https://www.tiktok.com/@jitranuchdang"},{"n":"ngamngamop","mk":"p2_ngamngamop","key":"p2_ngamngamop","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"22.8K","fee":4000,"url":"https://www.tiktok.com/@ngamngamop"},{"n":"nambabyyoda","mk":"p2_nambabyyoda","key":"p2_nambabyyoda","b":2667,"r":60000,"v":233334,"e":0,"ar":null,"av":null,"ae":null,"f":"152K","fee":3500,"url":"https://www.tiktok.com/@nambabyyoda"},{"n":"kk_karaket","mk":"p2_kk_karaket","key":"p2_kk_karaket","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"11.3K","fee":2500,"url":"https://www.tiktok.com/@kk_karaket"},{"n":"meetcyd","mk":"p2_meetcyd","key":"p2_meetcyd","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"11.5K","fee":3500,"url":"https://www.tiktok.com/@meetcyd"},{"n":"tonsonjin","mk":"p2_tonsonjin","key":"p2_tonsonjin","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"2,247","fee":3500,"url":"https://www.tiktok.com/@tonsonjin"},{"n":"ramyeon_happygirll","mk":"p2_ramyeon_happygirll","key":"p2_ramyeon_happygirll","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"2,057","fee":2500,"url":"https://www.tiktok.com/@ramyeon_happygirll"},{"n":"sumitanan_jj","mk":"p2_sumitanan_jj","key":"p2_sumitanan_jj","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"24.3K","fee":3000,"url":"https://www.tiktok.com/@sumitanan_jj"},{"n":"pair_storry","mk":"p2_pair_storry","key":"p2_pair_storry","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"12.6K","fee":3000,"url":"https://www.tiktok.com/@pair_storry"}]},{"name":"TikTok KOLs — Wave 2 (14 คน)","color":"#4E8F7E","items":[{"n":"p_waneng","mk":"p2_p_waneng","key":"p2_p_waneng","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"16K","fee":6250,"url":"https://www.tiktok.com/@p_waneng"},{"n":"prdminnn","mk":"p2_prdminnn","key":"p2_prdminnn","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"7,502","fee":10000,"url":"https://www.tiktok.com/@prdminnn"},{"n":"talaettaettae88","mk":"p2_talaettaettae88","key":"p2_talaettaettae88","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"33.8K","fee":15500,"url":"https://www.tiktok.com/@talaettaettae88"},{"n":"naesuuu","mk":"p2_naesuuu","key":"p2_naesuuu","b":2667,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"72.3K","fee":13000,"url":"https://www.tiktok.com/@naesuuu"},{"n":"mmintko","mk":"p2_mmintko","key":"p2_mmintko","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"7,546","fee":6000,"url":"https://www.tiktok.com/@mmintko"},{"n":"saengokpak","mk":"p2_saengokpak","key":"p2_saengokpak","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"173.3K","fee":15000,"url":"https://www.tiktok.com/@saengokpak"},{"n":"tattoooooo.o","mk":"p2_tattoooooo.o","key":"p2_tattoooooo.o","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"48K","fee":11750,"url":"https://www.tiktok.com/@tattoooooo.o"},{"n":"jk.today","mk":"p2_jk.today","key":"p2_jk.today","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"1,269","fee":3000,"url":"https://www.tiktok.com/@jk.today"},{"n":"filmberr_y","mk":"p2_filmberr_y","key":"p2_filmberr_y","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"1,641","fee":3000,"url":"https://www.tiktok.com/@filmberr_y"},{"n":"moopoo.reviews","mk":"p2_moopoo.reviews","key":"p2_moopoo.reviews","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"7,104","fee":3000,"url":"https://www.tiktok.com/@moopoo.reviews"},{"n":"leopakin.finsudsud","mk":"p2_leopakin.finsudsud","key":"p2_leopakin.finsudsud","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"23.5K","fee":3500,"url":"https://www.tiktok.com/@leopakin.finsudsud"},{"n":"pakhao.painoii","mk":"p2_pakhao.painoii","key":"p2_pakhao.painoii","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"7,859","fee":3500,"url":"https://www.tiktok.com/@pakhao.painoii"},{"n":"panutdapop","mk":"p2_panutdapop","key":"p2_panutdapop","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"2,403","fee":3000,"url":"https://www.tiktok.com/@panutdapop"},{"n":"bbellowna","mk":"p2_bbellowna","key":"p2_bbellowna","b":2666,"r":60000,"v":233333,"e":0,"ar":null,"av":null,"ae":null,"f":"6,362","fee":3000,"url":"https://www.tiktok.com/@bbellowna"}]}],
+    posts: [{"n":"VDO #1","ch":"FB+TT","by":"Brand","date":"2026-11-03","st":"wait"},{"n":"VDO #2","ch":"FB+TT","by":"Brand","date":"2026-11-07","st":"wait"},{"n":"VDO #3","ch":"FB+TT","by":"Brand","date":"2026-11-11","st":"wait"},{"n":"VDO #4","ch":"FB+TT","by":"Brand","date":"2026-11-15","st":"wait"},{"n":"VDO #5","ch":"FB+TT","by":"Brand","date":"2026-11-18","st":"wait"},{"n":"VDO #6","ch":"FB+TT","by":"Brand","date":"2026-11-22","st":"wait"},{"n":"VDO #7","ch":"FB+TT","by":"Brand","date":"2026-11-26","st":"wait"},{"n":"VDO #8","ch":"FB+TT","by":"Brand","date":"2026-11-30","st":"wait"},{"n":"VDO #9","ch":"FB+TT","by":"Brand","date":"2026-12-04","st":"wait"},{"n":"VDO #10","ch":"FB+TT","by":"Brand","date":"2026-12-08","st":"wait"},{"n":"Photo AWO #1","ch":"FB","by":"Brand","date":"2026-10-29","st":"wait"},{"n":"Photo AWO #2","ch":"FB","by":"Brand","date":"2026-11-13","st":"wait"},{"n":"Photo AWO #3","ch":"FB","by":"Brand","date":"2026-11-28","st":"wait"},{"n":"Photo AWO #4","ch":"FB","by":"Brand","date":"2026-12-08","st":"wait"},{"n":"Photo PRO #5","ch":"FB","by":"Brand","date":"2026-11-24","st":"wait"},{"n":"Page Post — ป้ายยาเซเว่น","ch":"FB","by":"ป้ายยาเซเว่น","date":"2026-11-03","st":"wait"},{"n":"Page Post — ผู้บริโภค","ch":"FB","by":"ผู้บริโภค","date":"2026-11-08","st":"wait"},{"n":"Page Post — ชี้เป้าเซเว่น","ch":"FB","by":"ชี้เป้าเซเว่น","date":"2026-11-23","st":"wait"},{"n":"KOL Wave 1 — justanothersunday","ch":"TT","by":"justanothersunday","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — oilaraoil","ch":"TT","by":"oilaraoil","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — todaymydae","ch":"TT","by":"todaymydae","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — proyyyp","ch":"TT","by":"proyyyp","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — boobaiiyook","ch":"TT","by":"boobaiiyook","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — littlebabietarn","ch":"TT","by":"littlebabietarn","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — ffonnn23","ch":"TT","by":"ffonnn23","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — jitranuchdang","ch":"TT","by":"jitranuchdang","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — ngamngamop","ch":"TT","by":"ngamngamop","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — nambabyyoda","ch":"TT","by":"nambabyyoda","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — kk_karaket","ch":"TT","by":"kk_karaket","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — meetcyd","ch":"TT","by":"meetcyd","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — tonsonjin","ch":"TT","by":"tonsonjin","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — ramyeon_happygirll","ch":"TT","by":"ramyeon_happygirll","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — sumitanan_jj","ch":"TT","by":"sumitanan_jj","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 1 — pair_storry","ch":"TT","by":"pair_storry","date":"2026-11-03","st":"wait"},{"n":"KOL Wave 2 — p_waneng","ch":"TT","by":"p_waneng","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — prdminnn","ch":"TT","by":"prdminnn","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — talaettaettae88","ch":"TT","by":"talaettaettae88","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — naesuuu","ch":"TT","by":"naesuuu","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — mmintko","ch":"TT","by":"mmintko","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — saengokpak","ch":"TT","by":"saengokpak","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — tattoooooo.o","ch":"TT","by":"tattoooooo.o","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — jk.today","ch":"TT","by":"jk.today","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — filmberr_y","ch":"TT","by":"filmberr_y","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — moopoo.reviews","ch":"TT","by":"moopoo.reviews","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — leopakin.finsudsud","ch":"TT","by":"leopakin.finsudsud","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — pakhao.painoii","ch":"TT","by":"pakhao.painoii","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — panutdapop","ch":"TT","by":"panutdapop","date":"2026-11-10","st":"wait"},{"n":"KOL Wave 2 — bbellowna","ch":"TT","by":"bbellowna","date":"2026-11-10","st":"wait"}],
+    timeline: [{"n":"VDO #1","s":6,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #2","s":10,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #3","s":14,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #4","s":18,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #5","s":21,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #6","s":25,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #7","s":29,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #8","s":33,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #9","s":37,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"VDO #10","s":41,"d":7,"c":"#C8102E","t":"Boost 7 วัน"},{"n":"Photo AWO #1","s":1,"d":7,"c":"#E8829F","t":"Boost 7 วัน"},{"n":"Photo AWO #2","s":16,"d":7,"c":"#E8829F","t":"Boost 7 วัน"},{"n":"Photo AWO #3","s":31,"d":7,"c":"#E8829F","t":"Boost 7 วัน"},{"n":"Photo AWO #4","s":41,"d":7,"c":"#E8829F","t":"Boost 7 วัน"},{"n":"Photo PRO #5","s":27,"d":7,"c":"#E8829F","t":"Boost 7 วัน (Tentative 24 พ.ย.–3 ม.ค.)"},{"n":"ป้ายยาเซเว่น (FB Page)","s":1,"d":30,"c":"#1877F2","t":"Boost 30 วัน"},{"n":"ผู้บริโภค (FB Page)","s":10,"d":30,"c":"#1877F2","t":"Boost 30 วัน"},{"n":"ชี้เป้าเซเว่น (FB Page)","s":27,"d":30,"c":"#1877F2","t":"Boost 30 วัน (Tentative 24 พ.ย.–3 ม.ค.)"},{"n":"KOC TikTok Wave 1 (16 คน)","s":6,"d":20,"c":"#2A6E5E","t":"Boost 20 วัน · โพสต์ 3-5 พ.ย."},{"n":"KOC TikTok Wave 2 (14 คน)","s":13,"d":20,"c":"#4E8F7E","t":"Boost 20 วัน · โพสต์ 10-12 พ.ย."}]
+  }
+};
+
+let PHASE = (location.hash.replace('#','') in PHASES) ? location.hash.replace('#','') : 'p2';
+let GROUPS, POSTS, TIMELINE, GSTART, GDAYS;
+function bindPhase(){
+  const P = PHASES[PHASE];
+  GROUPS = P.groups; POSTS = P.posts; TIMELINE = P.timeline;
+  GSTART = new Date(P.gStart[0], P.gStart[1], P.gStart[2]); GDAYS = P.gDays;
+}
+function setPhase(p){
+  if(!(p in PHASES)) return;
+  PHASE = p; history.replaceState(null,'','#'+p);
+  bindPhase(); render();
+}
+bindPhase();
 
 // งบที่ใช้จริง (Media) — เติมเมื่อปิดยอด
 const ACTUAL_SPEND = null;
@@ -390,7 +469,9 @@ let LIVE = {};
 let MANUAL = {};
 
 // ค่า FB ที่ hardcode ไว้ตอนแรก = ค่าตั้งต้น ถ้า manual_stats.json มีค่าจะใช้ตัวนั้นแทน
-GROUPS.forEach(g => g.items.forEach(i => { i._ar = i.ar; i._av = i.av; i._ae = i.ae; }));
+Object.values(PHASES).forEach(P => P.groups.forEach(g => g.items.forEach(i => {
+  i._ar = i.ar; i._av = i.av; i._ae = i.ae;
+})));
 
 function fbBase(i){
   const m = i.mk ? MANUAL[i.mk] : null;          // mk = id ประจำแถว ใช้จับคู่กับฟอร์ม
@@ -456,59 +537,7 @@ function applyLive(){
   }));
 }
 
-// ชิ้นงาน + ลิงก์โพสต์ (ที่ยังไม่มี ปล่อย link เป็น null → ขึ้น "รอลิงก์")
-const POSTS = [
-  { n:'VDO Teaser',            ch:'FB+TT', by:'Brand', date:'2026-07-21', st:'live',
-    fb:'https://www.facebook.com/share/r/1C38MZaxaV/', tt:'https://vt.tiktok.com/ZS4PJLMF4/' },
-  { n:'VDO Launching',         ch:'FB+TT', by:'Brand', date:'2026-07-24', st:'live',
-    fb:'https://www.facebook.com/share/r/1CssNYcVmV/', tt:'https://vt.tiktok.com/ZS4PJ8yar/' },
-  { n:'VDO Introduction',      ch:'FB+TT', by:'Brand', date:'2026-07-25', st:'live',
-    fb:'https://www.facebook.com/share/r/1G6nJYeKyf/', tt:'https://vt.tiktok.com/ZS4PJ1pox/' },
-  { n:'Photo AWO #1',          ch:'FB',    by:'Brand', date:'2026-07-28', st:'live',
-    fb:'https://www.facebook.com/share/p/1ET1Gh2W4j/' },
-  { n:'Photo AWO #2',          ch:'FB',    by:'Brand', date:'2026-07-29', st:'live',
-    fb:'https://www.facebook.com/share/p/1GYyv9o34T/' },
-  { n:'Photo album AWO #3',    ch:'FB',    by:'Brand', date:'2026-07-31', st:'live',
-    fb:'https://www.facebook.com/share/p/1DVTzcsKnq/' },
-  { n:'VDO Review',            ch:'FB+TT', by:'Brand', date:'2026-08-02', st:'live',
-    fb:'https://www.facebook.com/share/r/1cJr4aUfbt/', tt:'https://vt.tiktok.com/ZS4PJa3Sw/' },
-  { n:'Photo AWO activity #4', ch:'FB', by:'Brand', date:'2026-08-04', st:'live', fb:'https://www.facebook.com/share/p/1bCT4ypU49/' },
-  { n:'Photo AWO เจเล่แก้มป่อง #5', ch:'FB', by:'Brand', date:'2026-08-11', st:'live', fb:'https://www.facebook.com/share/p/1DdW8H9z94/' },
-  { n:'Photo AWO #6 ทีมไหน?', ch:'FB', by:'Brand', date:'2026-09-16', st:'live', fb:'https://www.facebook.com/share/p/1CRMpG7kpt/' },
-  { n:'Photo AWO #7',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
-  { n:'Photo AWO #8',          ch:'FB',    by:'Brand',              date:'-',          st:'wait' },
-  { n:'VDO Sampling Troop #1', ch:'FB+TT', by:'Brand', date:'2026-08-25', st:'live', fb:'https://www.facebook.com/share/r/1DGNsEfEFj/', tt:'https://vt.tiktok.com/ZSqd3T5Ft/' },
-  { n:'VDO Sampling Troop #2', ch:'FB+TT', by:'Brand', date:'2026-08-27', st:'live', fb:'https://www.facebook.com/share/r/1DWMPLQ9L5/', tt:'https://vt.tiktok.com/ZSqdTNQ8W/' },
-  { n:'VDO Sampling Troop #3', ch:'FB+TT', by:'Brand', date:'-', st:'live', fb:'https://www.facebook.com/share/r/18WAsPTD65/', tt:'https://vt.tiktok.com/ZSqcP4UhM/' },
-  { n:'VDO Sampling Troop #4', ch:'FB+TT', by:'Brand', date:'-', st:'live', fb:'https://www.facebook.com/share/r/1QTXBrHZ1Z/', tt:'https://vt.tiktok.com/ZSqcP4Agg/' },
-  { n:'KOL Post — chatangg',            ch:'TT', by:'chatangg',            date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4yjnsWB/' },
-  { n:'KOL Post — 100lowteens',         ch:'TT', by:'100lowteens',         date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4U6vYTF/' },
-  { n:'KOL Post — sristories.official', ch:'TT', by:'sristories.official', date:'2026-08-03', st:'live',   tt:'https://vt.tiktok.com/ZS4UfB9Gu/' },
-  { n:'KOL Post — foodballstylee',      ch:'TT', by:'foodballstylee',      date:'2026-08-03', st:'review', tt:'https://vt.tiktok.com/ZS4U7ftpy/' },
-  { n:'Page Post — ชี้เป้าเซเว่น',      ch:'FB', by:'ชี้เป้าเซเว่น',       date:'2026-07-23', st:'live',   fb:'https://www.facebook.com/share/p/1CXTuwYFkh/' },
-  { n:'Page Post — ผู้บริโภค',          ch:'FB', by:'ผู้บริโภค',           date:'2026-08-01', st:'live',   fb:'https://www.facebook.com/share/p/1cmnKmkWkA/' },
-];
 
-// Gantt: start = index วันที่ (0 = 20 ก.ค. 2026), len = จำนวนวัน
-const TIMELINE = [
-  { n:'VDO Teaser',                  s:1,  d:3,  c:'#C8102E', t:'Boost 3 วัน' },
-  { n:'VDO Launching',               s:4,  d:7,  c:'#C8102E', t:'Boost 7 วัน' },
-  { n:'VDO Introduction',            s:5,  d:14, c:'#C8102E', t:'Boost 14 วัน' },
-  { n:'VDO Review',                  s:13, d:14, c:'#C8102E', t:'Boost 14 วัน' },
-  { n:'Photo AWO #1',                s:8,  d:7,  c:'#E8829F', t:'Boost 7 วัน' },
-  { n:'Photo AWO #2',                s:9,  d:7,  c:'#E8829F', t:'Boost 7 วัน' },
-  { n:'Photo album AWO #3',          s:11, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
-  { n:'Photo AWO activity #4',       s:16, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
-  { n:'Photo AWO เจเล่แก้มป่อง #5',   s:23, d:7,  c:'#E8829F', t:'Boost 7 วัน' },
-  { n:'VDO Sampling Troop #1',       s:22, d:14, c:'#C97B3E', t:'Boost 14 วัน' },
-  { n:'ชี้เป้าเซเว่น (FB Page)',      s:4,  d:15, c:'#1877F2', t:'Boost 15 วัน' },
-  { n:'ชี้เป้าเซเว่น — LAL',          s:18, d:15, c:'#9AA0A6', t:'LAL 15 วัน' },
-  { n:'ผู้บริโภค (FB Page)',          s:13, d:15, c:'#1877F2', t:'Boost 15 วัน' },
-  { n:'KOLs TikTok ×4',              s:15, d:7,  c:'#2A6E5E', t:'Boost 7 วัน' },
-  { n:'KOLs TikTok ×4 — LAL',        s:23, d:15, c:'#9AA0A6', t:'LAL 15 วัน' },
-];
-
-const TODAY_INDEX = 14; // 3 ส.ค. 2026
 
 /* ======================= เรนเดอร์ (ไม่ต้องแก้) ======================= */
 const fmt = n => n.toLocaleString('en-US');
@@ -524,6 +553,12 @@ const done  = (a,k) => a.filter(x=>x[k]!=null).length;
 
 function render(){
 applyLive();
+
+// -- หัวเพจ + แท็บเฟส
+document.getElementById('phTabs').innerHTML = Object.keys(PHASES).map(k=>
+  `<button class="phtab${k===PHASE?' on':''}" onclick="setPhase('${k}')">${PHASES[k].label}<small>${PHASES[k].when}</small></button>`
+).join('');
+document.getElementById('hSub').innerHTML = PHASES[PHASE].sub;
 
 const totals = GROUPS.map(g => ({
   name:g.name, color:g.color, count:g.items.length, items:g.items,
@@ -640,7 +675,7 @@ document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
   const d = i.live;
   if(!d) return `<tr><td style="font-weight:600">${i.n}</td>
     <td colspan="8" style="color:var(--wait)">รอรอบดึงข้อมูลถัดไป — ระบบดึงอัตโนมัติเป็นระยะ (GitHub Actions)</td>
-    <td><a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a></td></tr>`;
+    <td>${i.post?`<a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a>`:'<span class="dash">รอลิงก์</span>'}</td></tr>`;
   const eng = (d.likes||0)+(d.comments||0)+(d.shares||0)+(d.saves||0);
   const er  = d.views ? (eng/d.views*100).toFixed(2)+'%' : '–';
   const cpv = d.views ? ((i.fee||0)+i.b)/d.views : null;
@@ -652,7 +687,7 @@ document.querySelector('#liveTable tbody').innerHTML = liveItems.map(i=>{
     <td class="num">${fmt(d.shares||0)}</td><td class="num">${fmt(d.saves||0)}</td>
     <td class="num">${fmt(eng)}</td><td class="num">${er}</td>
     <td class="num">${cpv==null?'–':cpv.toFixed(3)}</td>
-    <td><a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a></td></tr>`;
+    <td>${i.post?`<a class="link" href="${i.post}" target="_blank" rel="noopener">โพสต์ ↗</a>`:'<span class="dash">รอลิงก์</span>'}</td></tr>`;
 }).join('') + (()=>{
   const got = liveItems.filter(i=>i.live);
   if(!got.length) return '';
@@ -687,15 +722,24 @@ const withLink = POSTS.filter(p=>p.fb||p.tt).length;
 document.getElementById('linkCount').textContent = `มีลิงก์แล้ว ${withLink} / ${POSTS.length} ชิ้น`;
 
 // -- gantt
-const DAYS = 38, START = new Date(2026,6,20);
+const MTH = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const DAYS = GDAYS, START = GSTART;
+const _t0 = new Date(); _t0.setHours(0,0,0,0);
+const TODAY_INDEX = Math.round((_t0 - START)/86400000);
+const inRange = TODAY_INDEX >= 0 && TODAY_INDEX < DAYS;
+const step = DAYS > 45 ? 3 : 2;
 document.querySelector('.g-grid').style.setProperty('--cols', DAYS);
 let months='', days='';
 for(let i=0;i<DAYS;i++){
   const d = new Date(START); d.setDate(START.getDate()+i);
-  const showDay = (i===TODAY_INDEX) || (d.getDate()%2===0);
+  const showDay = (i===TODAY_INDEX) || (d.getDate()%step===0);
   days += `<div${i===TODAY_INDEX?' style="color:#C8102E;font-weight:700"':''}>${showDay?d.getDate():''}</div>`;
-  months += `<div>${(i===0||d.getDate()===1)?(d.getMonth()===6?'ก.ค.':'ส.ค.'):''}</div>`;
+  months += `<div>${(i===0||d.getDate()===1)?MTH[d.getMonth()]:''}</div>`;
 }
+document.getElementById('gNote').textContent = PHASES[PHASE].gNote;
+document.getElementById('gLegend').innerHTML = PHASES[PHASE].legend
+  .map(([c,l])=>`<span><i class="sw" style="background:${c}"></i> ${l}</span>`).join('');
+document.getElementById('srcNote').textContent = 'ที่มาข้อมูล: ' + PHASES[PHASE].src;
 document.getElementById('gDays').innerHTML = days;
 document.getElementById('gMonths').innerHTML = months;
 document.getElementById('gRows').innerHTML = TIMELINE.map(t=>{
@@ -703,12 +747,13 @@ document.getElementById('gRows').innerHTML = TIMELINE.map(t=>{
   return `<div class="g-row"><div class="g-name">${t.n}</div>
     <div class="g-track">
       <div class="g-bar" style="left:${left}%;width:${width}%;background:${t.c}" title="${t.t}">${t.t}</div>
-      <div class="g-today" style="left:${(TODAY_INDEX+0.5)/DAYS*100}%"></div>
+      ${inRange?`<div class="g-today" style="left:${(TODAY_INDEX+0.5)/DAYS*100}%"></div>`:''}
     </div></div>`;
 }).join('');
 
-document.getElementById('updated').textContent =
-  'อัปเดต ' + new Date().toLocaleDateString('th-TH-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'});
+document.getElementById('hMeta').innerHTML =
+  PHASES[PHASE].chips.map(c=>`<span class="chip">${c}</span>`).join('')
+  + `<span class="chip">อัปเดต ${new Date().toLocaleDateString('th-TH-u-ca-gregory',{day:'numeric',month:'long',year:'numeric'})}</span>`;
 }
 
 /* ---------- ฟอร์มกรอกยอด Facebook ---------- */
@@ -770,6 +815,17 @@ function buildManualJson(){
     const v=Number(inp.value); if(!isFinite(v)) return;
     (tt[inp.dataset.tt] = tt[inp.dataset.tt] || {})[inp.dataset.f] = v;
   });
+  // คงข้อมูลของเฟสอื่นไว้ ไม่ให้หายเวลาเซฟจากเฟสใดเฟสหนึ่ง
+  const mine = new Set(), mineTT = new Set();
+  GROUPS.forEach(g=>g.items.forEach(i=>{ if(i.mk) mine.add(i.mk); if(i.key) mineTT.add(i.key); }));
+  Object.keys(MANUAL).forEach(k=>{
+    if(k.startsWith('_') || mine.has(k) || k in out) return;
+    out[k] = MANUAL[k];
+  });
+  Object.entries(MANUAL._tiktok || {}).forEach(([k,v])=>{
+    if(mineTT.has(k) || k in tt) return;
+    tt[k] = v;
+  });
   if(Object.keys(tt).length){
     out._tiktok = tt;
     out._tiktok_updated = new Date().toISOString().slice(0,16).replace('T',' ');
@@ -782,7 +838,8 @@ function buildManualJson(){
   if(!ok && navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>{},()=>{}); ok=true; }
   document.getElementById('copyMsg').textContent =
     (ok?'✓ คัดลอกแล้ว':'คัดลอกเองจากกล่องด้านบน')
-    + ` · FB ${Object.keys(out).filter(k=>!k.startsWith('_')).length} ชิ้น · TikTok ${Object.keys(out._tiktok||{}).length} คลิป`;
+    + ` · FB ${Object.keys(out).filter(k=>!k.startsWith('_')).length} ชิ้น · TikTok ${Object.keys(out._tiktok||{}).length} คลิป`
+    + ' · รวมข้อมูลทั้ง 2 เฟสแล้ว';
   // ให้เห็นผลทันทีบนหน้าจอ (ยังไม่ถาวรจนกว่าจะ commit ไฟล์)
   MANUAL = out; render();
 }
