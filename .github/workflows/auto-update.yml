@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: '7,37 * * * *'
   workflow_dispatch:
+  # เติมลิงก์ใหม่แล้ว push = ดึงยอดทันที ไม่ต้องรอรอบ schedule
+  # (GitHub หน่วงรอบ schedule ของ repo นี้ไปถึง 4-6 ชม.)
+  # บอท commit แค่ scrape_results.json จึงไม่วนลูปตัวเอง
+  push:
+    branches: [main]
+    paths:
+      - 'tiktok_links.json'
+      - 'scripts/tiktok_scraper.py'
+      - '.github/workflows/**'
 
 permissions:
   contents: write
